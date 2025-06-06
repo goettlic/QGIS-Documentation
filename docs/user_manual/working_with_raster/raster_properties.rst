@@ -34,17 +34,17 @@ There are several tabs in the dialog:
     - |system| :ref:`Source <raster_sourcetab>`
     - |symbology| :ref:`Symbology <raster_symbology>`:sup:`[1]`
   * - |transparency| :ref:`Transparency <raster_transparency>`:sup:`[1]`
+    - |labelingSingle| :ref:`Labels <raster_labels>`:sup:`[1]`
     - |rasterHistogram| :ref:`Histogram <raster_histogram>`:sup:`[1]`
-    - |rendering| :ref:`Rendering <raster_rendering>`
-  * - |temporal| :ref:`Temporal <raster_temporal>`
+  * - |rendering| :ref:`Rendering <raster_rendering>`
+    - |temporal| :ref:`Temporal <raster_temporal>`
     - |pyramids| :ref:`Pyramids <raster_pyramids>`
-    - |elevationscale| :ref:`Elevation <raster_elevation>`
-  * - |editMetadata| :ref:`Metadata <raster_metadata>`
+  * - |elevationscale| :ref:`Elevation <raster_elevation>`
+    - |editMetadata| :ref:`Metadata <raster_metadata>`
     - |legend| :ref:`Legend <raster_server>`
-    - |display| :ref:`Display <raster_display>`
-  * - |overlay| :ref:`QGIS Server <raster_server>`
+  * - |display| :ref:`Display <raster_display>`
+    - |overlay| :ref:`QGIS Server <raster_server>`
     - :ref:`External plugins <plugins>`:sup:`[2]` tabs
-    -
 
 
 :sup:`[1]` Also available in the :ref:`Layer styling panel <layer_styling_panel>`
@@ -312,8 +312,8 @@ This renderer allows you to render a raster layer using :guilabel:`Single color`
 This type of renderer is useful when you want to display a raster layer
 uniformly, without any variation in color based on pixel values.
 
-The single color renderer can be used with both single-band and multi-band raster layers.
-When used with multi-band rasters, you can select which band to apply the single color to,
+The single color renderer can be used with both single-band and multiband raster layers.
+When used with multiband rasters, you can select which band to apply the single color to,
 effectively displaying that specific band uniformly across the entire layer.
 
 .. _figure_raster_singlecolor:
@@ -660,8 +660,13 @@ in the :guilabel:`Custom transparency options` section:
 
   #. Click the |symbologyAdd| :sup:`Add values manually` button.
      A new row will appear in the pixel list.
-  #. Enter the **Red**, **Green** and **Blue** values of the pixel and
+  #. For single-band based symbology (e.g. DEMs), enter the **From** and **To** values and
      adjust the **Percent Transparent** to apply.
+  #. For multiband based symbology (e.g. RGB images) enter the **Red**, **Green** and **Blue** values of the pixel and
+     adjust the **Percent Transparent** to apply.
+     QGIS supports **Tolerance** for pixel values, when defining transparency.
+     This means that pixels with color close to the specified RGB values can also
+     be made transparent. Note that this feature applies only to multiband rasters.
   #. Alternatively, you can fetch the pixel values directly from the
      raster using the |contextHelp| :sup:`Add values from display`
      button.
@@ -676,6 +681,80 @@ in the :guilabel:`Custom transparency options` section:
   The button |fileOpen| :sup:`Import from file` loads your transparency
   settings and applies them to the current raster layer.
 
+  .. only:: html
+
+    .. figure:: img/tolerances_for_pixel_values.gif
+       :align: center
+       :width: 100%
+
+       Using tolerances for multiband rasters
+
+
+.. index:: Labels
+.. _raster_labels:
+
+Labels Properties
+==================
+
+The |labelingSingle| :guilabel:`Labels` properties provides you with all the needed
+and appropriate capabilities to configure smart labeling on raster layers.
+This dialog can also be accessed from the :guilabel:`Layer Styling` panel.
+
+At the top of the dialog, you have:
+
+* a combobox for selecting the appropriate labeling method for the active layer
+* the |labelingRules| :sup:`Configure project labeling rules` button:
+  helps you control interactions between labels and features across the layers in the project.
+  More details at :ref:`labeling_rules`.
+* the |autoPlacementSettings| :sup:`Automated placement settings (applies to all layers)` button:
+  configure general properties on label placement and conflicts resolution.
+  More details at :ref:`automated_placement`.
+
+
+The first step is to choose the labeling method from the drop-down list.
+Available methods are:
+
+* |labelingNone| :guilabel:`No labels`: the default value, showing no labels
+  from the layer
+* |labelingSingle| :guilabel:`Label with pixel values`: Show labels on the map using a band.
+
+Using the |labelingSingle| :guilabel:`Label with pixel values` option, the following dialog opens.
+
+
+.. _figure_raster_labels:
+
+.. figure:: img/rasterLabels.png
+   :align: center
+
+   Raster layer labeling settings
+
+At the top of the dialog:
+
+* A :guilabel:`Value` drop-down list allows you to select the band to take the values from
+* Press :guilabel:`Customize` to configure a :ref:`proper number formatting <number_formatting>`
+* By default, the displayed value represents individual pixel band value.
+  With :guilabel:`Resample over`, you can compute the  value from the neighbouring pixels
+  (setting ``2`` means ``2*2=4`` pixels) using a statistical method
+  set in the :guilabel:`Resample using` widget.
+
+  .. _figure_raster_pixelslabeled:
+
+  .. figure:: img/pixels_labeled.png
+     :align: center
+
+     Pixels labeled using various resampling options
+
+Below are displayed options to customize the labels, under various tabs:
+
+* |text| :ref:`Text <labels_text>`
+* |labelformatting| :ref:`Formatting <labels_formatting>`
+* |labelbuffer| :ref:`Buffer <labels_buffer>`
+* |labelbackground| :ref:`Background <labels_background>`
+* |labelshadow| :ref:`Shadow <labels_shadow>`
+* |labelplacement| :ref:`Placement <labels_placement>`
+* |render| :ref:`Rendering <labels_rendering>`
+
+Description of how to set each property is exposed at :ref:`showlabels`.
 
 .. index:: Histogram
 .. _raster_histogram:
@@ -890,7 +969,8 @@ Elevation Properties
 The |elevationscale| :guilabel:`Elevation` tab provides options to control
 the layer elevation properties within a :ref:`3D map view <label_3dmapview>`
 and its appearance in the :ref:`profile tool charts <label_elevation_profile_view>`.
-Specifically, you can set:
+Specifically, you can choose to :guilabel:`Disable` this configuration if the layer
+does not contain elevation data or you can set:
 
 .. _figure_raster_elevation:
 
@@ -899,12 +979,27 @@ Specifically, you can set:
 
    Raster Elevation Properties
 
-* |unchecked| :guilabel:`Represents Elevation Surface`:
+* :guilabel:`Represents Elevation Surface`:
   whether the raster layer represents a height surface (e.g DEM) and the pixel
   values should be interpreted as elevations.
-  Check this option if you want to display a raster in an :ref:`elevation profile view <label_elevation_profile_view>`.
+  Choose this option if you want to display a raster in an :ref:`elevation profile view <label_elevation_profile_view>`.
   You will also need to fill in the :guilabel:`Band` to pick values from
   and can apply a :guilabel:`Scale` factor and an :guilabel:`Offset`.
+* :guilabel:`Fixed Elevation Range`: The raster layer (or selected raster band)
+  is associated with a fixed elevation range.
+  This mode can be used when a layer has a single fixed elevation or a range (slice) of elevation values.
+  If a range is specified, pixels will be extruded over this range.
+  You can set the :guilabel:`Lower` and :guilabel:`Upper`
+  elevation range values for the layer, and specify whether the lower or upper :guilabel:`Limits` are inclusive or exclusive.
+* :guilabel:`Fixed Elevation Range Per Band`: Each band in the raster can have a fixed elevation range
+  associated with it. This is designed for data sources that expose elevation-related data in bands, such as NetCDF files.
+  For example, a raster with temperature data at different ocean depths.
+  When rendering, the uppermost matching band will be selected and used for the layer's data.
+  This feature is exposed as a user-editable table for raster bands with lower and upper values.
+  Users can either populate the lower and upper values manually
+  or use an |expression| :guilabel:`Expression` to auto-fill all band values based on expression.
+  The expression-based fill allows you to design expressions that extract useful information from band names.
+  For example, extracting the depth value from a band name like "Band 001: depth=-5500 (meters)".  
 * :guilabel:`Profile Chart Appearance`: controls the rendering
   of the raster elevation data in the profile chart.
   The profile :guilabel:`Style` can be set as:
@@ -986,7 +1081,10 @@ pixels identification:
   You can check the result of your code sample in the :guilabel:`Preview` frame. You can also select and
   edit existing expressions using the :guilabel:`Insert/Edit Expression` button.
 
-   .. note:: Understanding the :guilabel:`Insert/Edit Expression` button behavior
+  You might look for expressions located in :guilabel:`Rasters` group or
+  the ``@layer_cursor_point`` variable in the :guilabel:`Expressions` dialog.
+
+  .. note:: **Understanding the** :guilabel:`Insert/Edit Expression` **button behavior**
 
     If you select some text within an expression (between "[%" and "%]"),
     or if no text is selected but the cursor is inside an expression,
@@ -1093,6 +1191,8 @@ such as:
 
 .. |actionRun| image:: /static/common/mAction.png
    :width: 1.5em
+.. |autoPlacementSettings| image:: /static/common/mIconAutoPlacementSettings.png
+   :width: 1.5em
 .. |checkbox| image:: /static/common/checkbox.png
    :width: 1.3em
 .. |contextHelp| image:: /static/common/mActionContextHelp.png
@@ -1113,6 +1213,22 @@ such as:
    :width: 1.5em
 .. |identify| image:: /static/common/mActionIdentify.png
    :width: 1.5em
+.. |labelbackground| image:: /static/common/labelbackground.png
+   :width: 1.5em
+.. |labelbuffer| image:: /static/common/labelbuffer.png
+   :width: 1.5em
+.. |labelformatting| image:: /static/common/labelformatting.png
+   :width: 1.5em
+.. |labelingNone| image:: /static/common/labelingNone.png
+   :width: 1.5em
+.. |labelingRules| image:: /static/common/mIconLabelingRules.png
+   :width: 1.5em
+.. |labelingSingle| image:: /static/common/labelingSingle.png
+   :width: 1.5em
+.. |labelplacement| image:: /static/common/labelplacement.png
+   :width: 1.5em
+.. |labelshadow| image:: /static/common/labelshadow.png
+   :width: 1.5em
 .. |legend| image:: /static/common/legend.png
    :width: 1.2em
 .. |mapIdentification| image:: /static/common/mActionMapIdentification.png
@@ -1131,6 +1247,8 @@ such as:
    :width: 1.5em
 .. |rasterHistogram| image:: /static/common/rasterHistogram.png
    :width: 1.5em
+.. |render| image:: /static/common/render.png
+   :width: 1.5em
 .. |rendering| image:: /static/common/rendering.png
    :width: 1.5em
 .. |setProjection| image:: /static/common/mActionSetProjection.png
@@ -1145,7 +1263,7 @@ such as:
    :width: 1.5em
 .. |temporal| image:: /static/common/temporal.png
    :width: 1.5em
+.. |text| image:: /static/common/text.png
+   :width: 1.5em
 .. |transparency| image:: /static/common/transparency.png
    :width: 1.5em
-.. |unchecked| image:: /static/common/unchecked.png
-   :width: 1.3em

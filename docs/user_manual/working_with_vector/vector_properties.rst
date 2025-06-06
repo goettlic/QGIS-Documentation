@@ -421,7 +421,7 @@ To use categorized symbology for a layer:
 Further tweaks can be done to the default classification:
 
 * You can |symbologyAdd| :sup:`Add` new categories, |symbologyRemove| :sup:`Remove`
-  selected categories or :guilabel:`Delete All` of them.
+  selected categories, :guilabel:`Delete All` of them or :guilabel:`Delete Unused` categories.
 * A class can be disabled by unchecking the checkbox to the left of the
   class name; the corresponding features are hidden on the map.
 * Drag-and-drop the rows to reorder the classes
@@ -892,12 +892,21 @@ Heatmap Renderer
 
 With the |heatmapSymbol| :guilabel:`Heatmap` renderer you can create live
 dynamic heatmaps for (multi)point layers.
-You can specify the heatmap radius in millimeters, points, pixels, map units or
-inches, choose and edit a color ramp for the heatmap style and use a slider for
+You can specify the heatmap :guilabel:`Radius` in millimeters, points, pixels, map units or
+inches, choose and edit a :guilabel:`Color ramp` for the heatmap style and use a slider for
 selecting a trade-off between render speed and quality. You can also define a
-maximum value limit and give a weight to points using a field or an expression.
+:guilabel:`Maximum value` limit and :guilabel:`Weight points by` using a field or an expression.
+
+Use |dataDefine| :sup:`Data defined override` to dynamically control :guilabel:`Radius` and
+:guilabel:`Maximum value` based on the attributes of your data.
+For example, the radius of a heatmap point could be determined by its population attribute,
+or the maximum value could be based on a temporal range.
+
 When adding or removing a feature the heatmap renderer updates the heatmap style
-automatically.
+automatically. The :guilabel:`Color ramp` will be shown as a legend bar and
+in the :guilabel:`Legend settings` you can set the :guilabel:`Labels` for the :guilabel:`Maximum`
+and :guilabel:`Minimum` values. You can also change the orientation and direction of the legend
+in the :guilabel:`Layout`.
 
 .. _figure_heatmap_symbology:
 
@@ -1136,6 +1145,35 @@ the symbol's frame rate:
       Setting the symbol's rotation to data defined expression
 
 
+.. _extent_buffer:
+
+Extent buffer
+.............
+You may set an extent buffer for a :ref:`symbol <edit_symbol>`. This means that a buffer is applied to
+the current map extent so that if a feature is outside of the actual map extent
+but inside the buffered extent it will still be rendered. This is useful for example
+with symbols which use the geometry generator where you would like to still see the
+generated geometries even if the actual feature is outside of the map extent.
+
+To edit the extent buffer you can utilize the :guilabel:`Extent buffer` panel.
+
+#. Start by going to the top symbol level and select :guilabel:`Advanced`
+   menu in the bottom right of the dialog
+#. Find :guilabel:`Extent buffer` option
+#. In the new panel you can set the buffer distance
+
+The buffer distance units can be changed. You can also control the distance value
+by using the data defined override widget. For example you can change the value
+based on the current map scale ``if(@map_scale > 50000, 5000, 0)``:
+
+ .. only:: html
+
+   .. figure:: img/extent_buffer.gif
+      :align: center
+      :width: 50%
+
+      Example of the extent buffer with a symbol using a geometry generator symbol level.
+
 
 .. index:: Paint effects
 .. _draw_effects:
@@ -1305,9 +1343,20 @@ Labels Properties
 =================
 
 The |labelingSingle| :guilabel:`Labels` properties provides you with all the needed
-and appropriate capabilities to configure smart labeling on vector layers. This
-dialog can also be accessed from the :guilabel:`Layer Styling` panel, or using
+and appropriate capabilities to configure smart labeling on vector layers.
+This dialog can also be accessed from the :guilabel:`Layer Styling` panel, or using
 the |labelingSingle| :sup:`Layer Labeling Options` button of the **Labels toolbar**.
+
+At the top of the dialog, you have:
+
+* a combobox for selecting the appropriate labeling method for the active layer
+* the |labelingRules| :sup:`Configure project labeling rules` button:
+  helps you control interactions between labels and features across the layers in the project.
+  More details at :ref:`labeling_rules`.
+* the |autoPlacementSettings| :sup:`Automated placement settings (applies to all layers)` button:
+  configure general properties on label placement and conflicts resolution.
+  More details at :ref:`automated_placement`.
+
 
 The first step is to choose the labeling method from the drop-down list.
 Available methods are:
@@ -1354,6 +1403,56 @@ Below are displayed options to customize the labels, under various tabs:
 
 Description of how to set each property is exposed at :ref:`showlabels`.
 
+.. _labeling_rules:
+
+Configuring project labeling rules
+----------------------------------
+
+Pressing the |labelingRules| :sup:`Configure project labeling rules` button
+next to the labeling method drop-down selector, you can create rules
+that controls how labels from a layer can interact with labels or features
+from another layer.
+
+#. Press the |symbologyAdd| :sup:`Add rule` button and in the drop-down menu,
+   select one of the rule types:
+
+   * :guilabel:`Prevent labels overlapping features`:
+     prevents labels being placed overlapping features from a different layer.
+   * :guilabel:`Pull labels towards features`:
+     prevents labels being placed too far from features from a different layer.
+     The maximum distance can be set in the unit of your choice.
+   * :guilabel:`Push labels away from features`:
+     prevents labels being placed too close to features from a different layer.
+     The minimum distance can be set in the unit of your choice,
+     as well as the :ref:`rule's priority <labels_priority>`
+     (The highest-priority rules are more important to respect
+     in the event of a label placement conflict).
+   * :guilabel:`Push labels away from other labels`:
+     prevents labels being placed too close to labels from a different layer.
+
+   .. attention:: Because the last three require a build based on GEOS >= 3.10,
+    they may not be available on your QGIS installation depending on the underlying
+    GEOS version in use.
+
+#. Fill the properties at your will; you can provide a more meaningful name to the rule.
+#. Press :guilabel:`OK`.
+#. Add as many rules as necessary.
+#. If necessary, press |symbologyEdit| :sup:`Edit rule` to modify the selected rule
+   or |symbologyRemove| :sup:`Remove rule` to delete it from the project.
+
+The set rules are available from any layer :guilabel:`Labels` properties tab,
+pressing the |labelingRules| :sup:`Configure project labeling rules` button.
+You can temporary enable or disable any of them, using the checkbox next to the name.
+Hover over a rule to preview its details.
+
+.. only:: html
+
+   .. figure:: img/labelplacementrules.gif
+      :align: center
+
+      Overview of labeling rules interaction
+
+
 .. index:: Labels; Automated placement
 .. _automated_placement:
 
@@ -1377,15 +1476,27 @@ options:
   polygon features the number of possible labels placement based on their size.
   The longer or wider a feature is, the more candidates it has, and its labels
   can be better placed with less risk of collision.
+
+.. _render_labels_text:
+
 * :guilabel:`Text rendering`: sets the default value for label rendering
   widgets when :ref:`exporting a map canvas <exportingmapcanvas>` or
   :ref:`a layout <create-output>` to PDF or SVG.
   If :guilabel:`Always render labels as text` is selected then labels can be
   edited in external applications (e.g. Inkscape) as normal text. BUT the side
   effect is that the rendering quality is decreased, and there are issues with
-  rendering when certain text settings like buffers are in place. That's why
-  :guilabel:`Always render labels as paths (recommended)` which exports labels
-  as outlines, is recommended.
+  rendering when certain text settings like buffers are in place.
+  That's why :guilabel:`Always render labels as paths (recommended)`
+  which exports labels as outlines but guarantees complete compatibility
+  with the full range of formatting options available, is recommended.
+  With :guilabel:`Prefer rendering labels as text` option, labels are rendered as text objects,
+  unless doing so results in rendering artifacts or poor quality rendering (depending on text format settings).
+
+  .. note:: When rendering labels as text to a vector based device (e.g. PDF or SVG),
+    care must be taken to ensure that the required fonts are available to users
+    when opening the created files, or default fallback fonts will be used to display the output instead.
+    (Although PDF exports MAY automatically embed some fonts when possible, depending on the user’s platform).
+
 * |checkbox| :guilabel:`Allow truncated labels on edges of map`: controls
   whether labels which fall partially outside of the map extent should be
   rendered. If checked, these labels will be shown (when there's no way to
@@ -1403,6 +1514,8 @@ options:
   Like the label says, it's useful only for debugging and testing the effect different
   labeling settings have. This could be handy for a better manual placement with
   tools from the :ref:`label toolbar <label_toolbar>`.
+* |unchecked| :guilabel:`Show label metrics (for debugging)`:
+  displays the text bounds of the label in red and baselines in blue
 * :guilabel:`Project labeling version`: QGIS supports two different versions of
   label automatic placement:
 
@@ -1774,7 +1887,9 @@ Diagrams Properties
 ===================
 
 The |diagram| :guilabel:`Diagrams` tab allows you to add a graphic overlay to
-a vector layer (see :numref:`figure_diagrams_attributes`).
+a vector layer (see :numref:`figure_diagrams_attributes`). This
+dialog can also be accessed from the :guilabel:`Layer Styling` panel, or using
+the |diagram| :sup:`Layer Diagram Options` button of the **Labels toolbar**.
 
 The current core implementation of diagrams provides support for:
 
@@ -1786,9 +1901,12 @@ The current core implementation of diagrams provides support for:
 * |text| :guilabel:`Text diagram`, a horizontally divided circle showing statistic
   values inside;
 * |histogram| :guilabel:`Histogram`, bars of varying colors for each attribute
-  aligned next to each other
-* |stackedBar| :guilabel:`Stacked bars`, Stacks bars of varying colors for each
-  attribute on top of each other vertically or horizontally
+  aligned next to each other;
+* |stackedBar| :guilabel:`Stacked bars`, stacks bars of varying colors for each
+  attribute on top of each other vertically or horizontally;
+* |stackedDiagram| :guilabel:`Stacked diagram`, stacks diagrams of equal or varying
+  types, next to each other, vertically or horizontally. More details at
+  :ref:`Stacked Diagrams <stacked_diagrams>`.
 
 In the top right corner of the :guilabel:`Diagrams` tab, the |autoPlacementSettings|
 :sup:`Automated placement settings (applies to all layers)` button provides
@@ -1988,6 +2106,39 @@ in the :ref:`Layers panel <label_legend>`, and in the :ref:`print layout legend
 
 When set, the diagram legend items (attributes with color and diagram size)
 are also displayed in the print layout legend, next to the layer symbology.
+
+.. _stacked_diagrams:
+
+Stacked Diagrams
+----------------
+
+Stacked diagrams allow users to create complex diagrams like population pyramids,
+where two subdiagrams, namely histograms, are located side by side and displayed
+horizontally.
+
+.. _figure_stacked_diagrams:
+
+.. figure:: img/population_pyramids.png
+   :align: center
+
+   Population pyramids built for each layer feature
+
+Multi-temporal diagrams can also be constructed as stacked diagrams. The number
+of subdiagrams, as well as the spacing between them can be configured.
+
+Moreover, subdiagrams can have different types (e.g., a pie chart alongside a
+histogram) and have their own independent settings like :ref:`Attributes <diagram_attributes>`,
+:ref:`Rendering <diagram_appearance>`, :ref:`Size <diagram_size>`,
+:ref:`Options <diagram_options>` and :ref:`Legend <diagram_legend>`.
+
+:ref:`Placement <diagram_placement>` settings in a stacked diagram, as well as
+some visibility settings (located in the :ref:`Rendering <diagram_appearance>`
+tab), are determined by the placement and visibility settings of the first
+subdiagram in the stack.
+
+Finally, subdiagram ordering is given by the item ordering in the Stacked Diagram's
+list. The first subdiagram appears to the left in a horizontal stacked diagram,
+or in the upper part of a vertical one.
 
 .. _vector_mask_menu:
 
@@ -2293,7 +2444,8 @@ Other Widgets
 The drag and drop designer offers a number of widgets that are not connected to a particular field.
 They can be used to enhance the appearance of the form or to display dynamically calculated values.
 
-* :guilabel:`HTML Widget`: embeds an HTML page, the HTML source may contain the result of dynamically calculated expressions.
+* :guilabel:`HTML Widget`: embeds an HTML page, the HTML source may contain the result
+  of dynamically calculated expressions.
 
   HTML widgets can be used for example to display images stored as BLOB in a field
   (let's call it ``photo``):
@@ -2320,11 +2472,30 @@ They can be used to enhance the appearance of the form or to display dynamically
 
      A preview of your image is displayed on the right.
 
-* :guilabel:`QML Widget`: embeds a QML page, the QML source may contain the result of dynamically calculated expressions.
+* :guilabel:`QML Widget`: embeds a Qt QML_ document, displaying graphical elements in the attribute form.
+  Beside the custom :guilabel:`Title` of the added widget and whether it should be shown or not,
+  you can select from predefined :guilabel:`QML code` elements:
+
+  * :guilabel:`Free text...`: allows you to write from scratch or paste an existing code
+  * :guilabel:`Rectangle`: provides a minimal code for displaying a rectangle
+  * :guilabel:`Bar chart`: provides a minimal code for displaying a bar chart
+  * :guilabel:`Pie chart`: provides a minimal code for displaying a pie chart
+
+  You can extend the code with QML syntax, use layer fields or QGIS expressions
+  that are dynamically calculated.
+
+  .. _figure_qml_widget:
+
+  .. figure:: img/qml_widget_dialog.png
+     :align: center
+
+     Setting a QML graph to display in attribute form
+
 * :guilabel:`Text Widget`: displays a text widget which supports basic HTML markup
   and may contain the result of dynamically calculated expressions.
 * :guilabel:`Spacer Widget`: inserts an empty transparent rectangle, increasing the vertical distance between two widgets.
 
+.. _QML: https://doc.qt.io/qt-5/qtqml-syntax-basics.html
 
 .. tip:: **Display Dynamic Content**
 
@@ -2399,6 +2570,21 @@ and the values or range of values that are allowed to be added to each.
 
    Dialog to select an edit widget for an attribute column
 
+.. tip:: **Copy and paste widget configuration**
+
+   The field configuration can be copied to the clipboard and then pasted to
+   another field via right click on a field in the :guilabel:`Available widgets` panel.
+
+   This comes handy to save time and to make sure that common settings are
+   correctly applied to several related fields, e.g., when configuring latitude and
+   longitude field widgets.
+
+   Copy and paste of widget configuration can be done between fields of the same
+   layer, between fields from different layers in the QGIS project, or between fields
+   from layers in different QGIS instances.
+
+   Note that neither aliases nor comments are copied, since those are specific to
+   each particular field.
 
 .. index:: Default values, Fields constraints, Alias
 
@@ -2511,11 +2697,12 @@ Default values
 Policies
 ^^^^^^^^
 
-:guilabel:`Policies` allows you to determine how values are assigned to the field when :guilabel:`Splitting features`:
+:guilabel:`Policies` allows you to determine how values are assigned to the field
+when :guilabel:`Splitting features` or :guilabel:`Duplicating features`:
 
-* :guilabel:`Duplicate Values`: Keeps the existing value of the field for the resulting split features.
+* :guilabel:`Duplicate Values`: Keeps the existing value of the field for the new features.
 * :guilabel:`Use Default Value`: Resets the field by recalculating its :ref:`default value <default_values>`.
-  If no default value clause exists, the existing value is kept for the resulting split features.
+  If no default value clause exists, the existing value is kept for the new features.
 * :guilabel:`Remove Value`: Clears the field to an unset state.
 * :guilabel:`Use Ratio Geometries`: Recalculates the field value for all split portions
   by multiplying the existing value by ratio of the split parts lengths or areas.
@@ -2552,9 +2739,11 @@ with the field type. The available widgets are:
   database. This is currently only supported by the PostgreSQL provider, for
   fields of ``enum`` type.
 * **Attachment**: Uses a "Open file" dialog to store file path in a
-  relative or absolute mode. It can be used to display a hyperlink (to
-  document path), a picture or a web page. User can also configure an
-  :ref:`external storage system <external_storage>` to fetch/store resources.
+  relative or absolute mode. It can be used to display the document path as a hyperlink
+  or render the document within a dedicated widget in the form.
+  Supported document types are image, web page, audio and video,
+  and the supported file formats depend on the Operating System.
+  You can also configure an :ref:`external storage system <external_storage>` to fetch/store resources.
 
   .. tip:: **Relative Path in Attachment widget**
 
@@ -2583,6 +2772,13 @@ with the field type. The available widgets are:
   for fields of ``array`` type.
 * **Range**: Allows you to set numeric values from a specific range. The edit
   widget can be either a slider or a spin box.
+
+  .. note::
+
+   Some layers, such as GeoPackage or ESRI File Geodatabase, with predefined **range Field Domains**
+   will be automatically recognized by QGIS and assigned a **Range** widget for the relevant fields.
+   The widget will be prefilled with the minimum and maximum values specified in the domain.
+
 * **Relation Reference**: This is the default widget assigned to the referencing
   field (i.e., the foreign key in the child layer) when a :ref:`relation <vector_relations>`
   is set. It provides direct access to the parent feature's form which in turn
@@ -2599,6 +2795,12 @@ with the field type. The available widgets are:
 * **Value Map**: A combo box with predefined items. The value is stored in
   the attribute, the description is shown in the combo box. You can define
   values manually or load them from a layer or a CSV file.
+  
+  .. note::
+
+   Some layers, such as GeoPackage or ESRI File Geodatabase, with predefined **coded Field Domains**
+   will be automatically recognized by QGIS and assigned a **Value Map** widget for the relevant fields.
+
 * **Value Relation**: Offers values from a related table in a combobox. You can
   select layer, key column and value column. Several options are available to
   change the standard behaviors: allow null value, order by value, allow
@@ -2983,7 +3185,7 @@ Duplicating Actions
 
 QGIS allows you to duplicate existing actions. To duplicate an attribute action, 
 open the vector :guilabel:`Layer Properties` dialog and click on the :guilabel:`Actions` tab. 
-In the :guilabel:`Actions` tab, click the |duplicateAction| :sup:`Duplicate an action`
+In the :guilabel:`Actions` tab, click the |duplicateLayout| :sup:`Duplicate an action`
 to open the :guilabel:`Duplicate Action` dialog. You must have selected at least one existing action 
 in order to create a duplicate.
 
@@ -3192,7 +3394,7 @@ feature identification:
     features in all layers
   * the feature identifier in the attribute table :ref:`form view <attribute_table_view>`
   * the feature identifier when the map or layout is exported to a layered
-    output format such as GeoPDF
+    output format such as Geospatial PDF
   * the map tip information, i.e. the message displayed in the map canvas
     when hovering over a feature of the active layer with the |mapTips| :sup:`Show Map Tips` icon pressed.
     Applicable when |checkbox| :guilabel:`Enable Map Tips` is active
@@ -3424,7 +3626,16 @@ Specifically, you can set:
 
    Vector layer elevation properties dialog
 
-
+* :guilabel:`Vertical Reference System`: If the CRS of your vector layer is a compound one
+  (including a Z dimension), then the vertical CRS used for the layer will be the vertical
+  component of the layer CRS. In this case, you cannot manually set a different vertical CRS.
+  If your layer CRS is horizontal (2D), then you can select a specific vertical CRS
+  by clicking on the |setProjection| :sup:`Select CRS`.
+  Vertical reference systems are supported for vector layers by:
+   
+   * :ref:`Elevation profiles <label_elevation_profile_view>`
+   * :ref:`Identify Tool Results <identify_results_dialog>`
+   * :ref:`3D map views <label_3dmapview>`
 * :guilabel:`Elevation Clamping`: defines how and whether the features altitude
   should be:
 
@@ -3587,10 +3798,12 @@ sections.
 
 From the :guilabel:`Description` section, you can change the :guilabel:`Short name`
 used to reference the layer in requests (to learn more about short names, read
-:ref:`services_basics_short_name`). You can also add or edit a :guilabel:`Title` and
-:guilabel:`Abstract` for the layer, or define a :guilabel:`Keyword list` here. These
-keyword lists can be used in a metadata catalog. If you want to use a title from an
-XML metadata file, you have to fill in a link in the :guilabel:`Data URL` field.
+:ref:`services_basics_short_name`). You can also add or edit a
+:guilabel:`Title`, an alternative :guilabel:`WFS Title` and
+:guilabel:`Abstract` for the layer, or define a :guilabel:`Keyword list` here.
+These keyword lists can be used in a metadata catalog. If you want to use a
+title from an XML metadata file, you have to fill in a link in the
+:guilabel:`Data URL` field.
 
 Use :guilabel:`Attribution` to get attribute data from an XML metadata catalog.
 
@@ -3783,7 +3996,7 @@ To do so:
    :width: 1.5em
 .. |display| image:: /static/common/display.png
    :width: 1.5em
-.. |duplicateAction| image:: /static/common/mActionDuplicateLayout.png
+.. |duplicateLayout| image:: /static/common/mActionDuplicateLayout.png
    :width: 1.5em
 .. |editMetadata| image:: /static/common/editmetadata.png
    :width: 1.2em
@@ -3822,6 +4035,8 @@ To do so:
 .. |labelingObstacle| image:: /static/common/labelingObstacle.png
    :width: 1.5em
 .. |labelingRuleBased| image:: /static/common/labelingRuleBased.png
+   :width: 1.5em
+.. |labelingRules| image:: /static/common/mIconLabelingRules.png
    :width: 1.5em
 .. |labelingSingle| image:: /static/common/labelingSingle.png
    :width: 1.5em
@@ -3893,6 +4108,8 @@ To do so:
 .. |sourceFields| image:: /static/common/mSourceFields.png
    :width: 1.5em
 .. |stackedBar| image:: /static/common/stacked-bar.png
+   :width: 1.5em
+.. |stackedDiagram| image:: /static/common/stacked-diagram.png
    :width: 1.5em
 .. |symbology| image:: /static/common/symbology.png
    :width: 2em

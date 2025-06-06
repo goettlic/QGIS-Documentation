@@ -68,25 +68,25 @@ Parameters
 
        Optional
      - ``CELL_SIZE_X``
-     - [number]
+     - [numeric: double]
      - Cell size in X direction to be used instead of the reference layer's
    * - **Override reference cell size Y**
 
        Optional
      - ``CELL_SIZE_Y``
-     - [number]
+     - [numeric: double]
      -  Cell size in Y direction to be used instead of the reference layer's
    * - **Override reference grid offset X**
 
        Optional
      - ``GRID_OFFSET_X``
-     - [number]
+     - [numeric: double]
      -  Offset in X direction to apply to cells grid
    * - **Override reference grid offset Y**
 
        Optional
      - ``GRID_OFFSET_Y``
-     - [number]
+     - [numeric: double]
      - Offset in Y direction to apply to cells grid
    * - **Clip to extent**
 
@@ -194,25 +194,25 @@ Parameters
 
        Optional
      - ``CELL_SIZE_X``
-     - [number]
+     - [numeric: double]
      - Cell size in X direction to be used instead of the reference layer's
    * - **Override reference cell size Y**
 
        Optional
      - ``CELL_SIZE_Y``
-     - [number]
+     - [numeric: double]
      -  Cell size in Y direction to be used instead of the reference layer's
    * - **Override reference grid offset X**
 
        Optional
      - ``GRID_OFFSET_X``
-     - [number]
+     - [numeric: double]
      -  Offset in X direction to apply to cells grid
    * - **Override reference grid offset Y**
 
        Optional
      - ``GRID_OFFSET_Y``
-     - [number]
+     - [numeric: double]
      - Offset in Y direction to apply to cells grid
    * - **Clip to extent**
 
@@ -292,32 +292,32 @@ Parameters
 
    * - **Tile size**
      - ``TILE_SIZE``
-     - [number]
-       
+     - [numeric: integer]
+
        Default: 1024
      - Size of the tile of the output raster layer. Minimum value: 64.
    * - **Map units per pixel**
      - ``MAP_UNITS_PER_PIXEL``
-     - [number]
+     - [numeric: double]
        
        Default: 100.0
      - Pixel size (in map units). Minimum value: 0.0
    * - **Make background transparent**
      - ``MAKE_BACKGROUND_TRANSPARENT``
      - [boolean]
-        
+
        Default: False
      - Allows exporting the map with a transparent background.
        Outputs an RGBA (instead of RGB) image if set to ``True``.
    * - **Map theme to render**
-       
+
        Optional
      - ``MAP_THEME``
      - [enumeration]
      - Use an existing :ref:`map theme <map_themes>` for the
        rendering.
    * - **Single layer to render**
-       
+
        Optional
      - ``LAYER``
      - [enumeration]
@@ -327,7 +327,7 @@ Parameters
      - [raster]
 
        Default: ``[Save to temporary file]``
-     - Specification of the output raster. One of:
+     - Specification of the output raster. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types**
@@ -348,7 +348,7 @@ Outputs
      - ``OUTPUT``
      - [raster]
      - Output raster layer
-  
+
 Python code
 ...........
 
@@ -378,6 +378,9 @@ fill value will be truncated when applied to an integer raster.
 Parameters
 ..........
 
+Basic parameters
+^^^^^^^^^^^^^^^^
+
 .. list-table::
    :header-rows: 1
    :widths: 20 20 20 40
@@ -392,13 +395,13 @@ Parameters
      - The raster to process.
    * - **Band number**
      - ``BAND``
-     - [number]
+     - [raster band]
 
        Default: 1
      - The band of the raster
    * - **Fill value**
      - ``FILL_VALUE``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      - Set the value to use for the NoData pixels
@@ -407,11 +410,39 @@ Parameters
      - [raster]
 
        Default: ``[Save to temporary file]``
-     - Specification of the output raster. One of:
+     - Specification of the output raster. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types**
           :end-before: **end_file_output_types**
+
+Advanced parameters
+^^^^^^^^^^^^^^^^^^^
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 20 40
+   :class: longtable
+
+   * - Label
+     - Name
+     - Type
+     - Description
+   * - **Creation options**
+
+       Optional
+     - ``CREATION_OPTIONS`` (for QGIS <= 3.42, this was ``CREATE_OPTIONS``)
+     - [string]
+
+       Default: ''
+     - For adding one or more creation options that control the
+       raster to be created (colors, block size, file
+       compression...).
+       For convenience, you can rely on predefined profiles (see
+       :ref:`GDAL driver options section <gdal_createoptions>`).
+
+       Batch Process and Model Designer: separate multiple options with a pipe
+       character (``|``).
 
 Outputs
 .......
@@ -477,19 +508,19 @@ Basic parameters
 
    * - **Minimum zoom**
      - ``ZOOM_MIN``
-     - [number]
+     - [numeric: integer]
 
        Default: 12
      - Minimum 0, maximum 25.
    * - **Maximum zoom**
      - ``ZOOM_MAX``
-     - [number]
+     - [numeric: integer]
 
        Default: 12
      - Minimum 0, maximum 25.
    * - **DPI**
      - ``DPI``
-     - [number]
+     - [numeric: integer]
 
        Default: 96
      - Minimum 48, maximum 600.
@@ -521,7 +552,7 @@ Basic parameters
 
        Optional
      - ``QUALITY``
-     - [number]
+     - [numeric: integer]
 
        Default: 75
      - Minimum 1, maximum 100.
@@ -529,7 +560,7 @@ Basic parameters
 
        Optional
      - ``METATILESIZE``
-     - [number]
+     - [numeric: integer]
 
        Default: 4
      - Specify a custom metatile size when generating XYZ tiles.
@@ -541,7 +572,7 @@ Basic parameters
 
        Optional
      - ``TILE_WIDTH``
-     - [number]
+     - [numeric: integer]
 
        Default: 256
      - Minimum 1, maximum 4096.
@@ -549,26 +580,22 @@ Basic parameters
 
        Optional
      - ``TILE_HEIGHT``
-     - [number]
+     - [numeric: integer]
 
        Default: 256
      - Minimum 1, maximum 4096.
    * - **Use inverted tile Y axis (TMS conventions)**
-
-       Optional
      - ``TMS_CONVENTION``
      - [boolean]
 
        Default: False
      - 
    * - **Output directory**
-
-       Optional
      - ``OUTPUT_DIRECTORY``
      - [folder]
 
        Default: ``[Save to temporary folder]``
-     - Specification of the output directory (for the tiles). One of:
+     - Specification of the output directory (for the tiles). :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **directory_output_types_skip**
@@ -581,7 +608,7 @@ Basic parameters
      - [html]
 
        Default: ``[Save to temporary file]``
-     - Specification of the output HTML file. One of:
+     - Specification of the output HTML file. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types_skip**
@@ -617,8 +644,6 @@ Advanced parameters
      - Custom map attribution used for the Leaflet HTML output file.
        HTML links are possible.
    * - **Include OpenStreetMap basemap in Leaflet HTML output**
-
-       Optional
      - ``HTML_OSM``
      - [boolean]
 
@@ -689,19 +714,19 @@ Parameters
 
    * - **Minimum zoom**
      - ``ZOOM_MIN``
-     - [number]
+     - [numeric: integer]
 
        Default: 12
      - Minimum 0, maximum 25.
    * - **Maximum zoom**
      - ``ZOOM_MAX``
-     - [number]
+     - [numeric: integer]
 
        Default: 12
      - Minimum 0, maximum 25.
    * - **DPI**
      - ``DPI``
-     - [number]
+     - [numeric: integer]
 
        Default: 96
      - Minimum 48, maximum 600.
@@ -733,7 +758,7 @@ Parameters
 
        Optional
      - ``QUALITY``
-     - [number]
+     - [numeric: integer]
 
        Default: 75
      - Minimum 1, maximum 100.
@@ -741,7 +766,7 @@ Parameters
 
        Optional
      - ``METATILESIZE``
-     - [number]
+     - [numeric: integer]
 
        Default: 4
      - Specify a custom metatile size when generating XYZ tiles.
@@ -754,7 +779,7 @@ Parameters
      - [file]
 
        Default: ``[Save to temporary file]``
-     - Specification of the output file. One of:
+     - Specification of the output file. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types_skip**

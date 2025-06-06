@@ -28,6 +28,9 @@ distances will offset them to the right.
 |checkbox| Allows :ref:`features in-place modification <processing_inplace_edit>`
 of line features
 
+.. warning::
+ This algorithm drops existing primary keys or FID values and regenerates them in output layers.
+
 .. seealso:: :ref:`qgisoffsetline`, :ref:`qgisarraytranslatedfeatures`
 
 Parameters
@@ -51,13 +54,13 @@ Basic parameters
      - Input line vector layer to use for the offsets.
    * - **Number of features to create**
      - ``COUNT``
-     - [number |dataDefine|]
+     - [numeric: integer] |dataDefine|
 
        Default: 10
      - Number of offset copies to generate for each feature
    * - **Offset step distance**
      - ``OFFSET``
-     - [number |dataDefine|]
+     - [numeric: double] |dataDefine|
 
        Default: 1.0
      - Distance between two consecutive offset copies
@@ -66,7 +69,7 @@ Basic parameters
      - [vector: line]
 
        Default: ``[Create temporary layer]``
-     - Specify the output line layer with offset features. One of:
+     - Specify the output line layer with offset features. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types_append**
@@ -86,7 +89,7 @@ Advanced parameters
      - Description
    * - **Segments**
      - ``SEGMENTS``
-     - [number]
+     - [numeric: double]
 
        Default: 8
      - Number of line segments to use to approximate a quarter
@@ -110,7 +113,7 @@ Advanced parameters
           Round, miter, and bevel join styles
    * - **Miter limit**
      - ``MITER_LIMIT``
-     - [number]
+     - [numeric: double]
 
        Default: 2.0
      - Sets the maximum distance from the offset geometry to use
@@ -172,6 +175,9 @@ M values present in the geometry can also be translated.
 :ref:`features in-place modification <processing_inplace_edit>`
 of point, line, and polygon features
 
+.. warning::
+ This algorithm drops existing primary keys or FID values and regenerates them in output layers.
+
 .. seealso:: :ref:`qgistranslategeometry`, :ref:`qgisarrayoffsetlines`
 
 Parameters
@@ -188,35 +194,35 @@ Parameters
      - Description
    * - **Input layer**
      - ``INPUT``
-     - [vector: any]
+     - [vector: geometry]
      - Input vector layer to translate
    * - **Number of features to create**
      - ``COUNT``
-     - [number |dataDefine|]
+     - [numeric: integer] |dataDefine|
 
        Default: 10
      - Number of copies to generate for each feature
    * - **Step distance (x-axis)**
      - ``DELTA_X``
-     - [number |dataDefine|]
+     - [numeric: double] |dataDefine|
 
        Default: 0.0
      - Displacement to apply on the X axis
    * - **Step distance (y-axis)**
      - ``DELTA_Y``
-     - [number |dataDefine|]
+     - [numeric: double] |dataDefine|
 
        Default: 0.0
      - Displacement to apply on the Y axis
    * - **Step distance (z-axis)**
      - ``DELTA_Z``
-     - [number |dataDefine|]
+     - [numeric: double] |dataDefine|
 
        Default: 0.0
      - Displacement to apply on the Z axis
    * - **Step distance (m values)**
      - ``DELTA_M``
-     - [number |dataDefine|]
+     - [numeric: double] |dataDefine|
 
        Default: 0.0
      - Displacement to apply on M
@@ -227,7 +233,7 @@ Parameters
        Default: ``[Create temporary layer]``
      - Output vector layer with translated (moved) copies
        of the features.
-       The original features are also copied. One of:
+       The original features are also copied. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types_append**
@@ -317,26 +323,26 @@ Parameters
 
    * - **Horizontal spacing**
      - ``HSPACING``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      - Size of a grid cell on the X-axis
    * - **Vertical spacing**
      - ``VSPACING``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      - Size of a grid cell on the Y-axis
    * - **Horizontal overlay**
      - ``HOVERLAY``
-     - [number]
+     - [numeric: double]
 
        Default: 0.0
      - Overlay distance between two consecutive grid cells on the
        X-axis
    * - **Vertical overlay**
      - ``VOVERLAY``
-     - [number]
+     - [numeric: double]
 
        Default: 0.0
      - Overlay distance between two consecutive grid cells on the
@@ -349,10 +355,10 @@ Parameters
      - Coordinate reference system to apply to the grid
    * - **Grid**
      - ``OUTPUT``
-     - [vector: any]
+     - [vector: geometry]
 
        Default: ``[Create temporary layer]``
-     - Resulting vector grid layer. One of:
+     - Resulting vector grid layer. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -371,7 +377,7 @@ Outputs
      - Description
    * - **Grid**
      - ``OUTPUT``
-     - [vector: any]
+     - [vector: geometry]
      - Resulting vector grid layer. The output geometry type (point,
        line or polygon) depends on the :guilabel:`Grid type`.
        Features are created from top to bottom, left to right.
@@ -392,6 +398,147 @@ Python code
   :end-before: **end_algorithm_code_section**
 
 
+.. _qgisextenttolayer:
+
+Create layer from extent
+------------------------
+Creates a new vector layer that contains a single feature with
+geometry matching the extent of the input layer.
+
+It can be used in models to convert a literal extent (``xmin``,
+``xmax``, ``ymin``, ``ymax`` format) into a layer which can be used
+for other algorithms which require a layer based input.
+
+.. seealso:: :ref:`qgispointtolayer`
+
+Parameters
+..........
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 20 40
+
+   * - Label
+     - Name
+     - Type
+     - Description
+   * - **Extent (xmin, xmax, ymin, ymax)**
+     - ``INPUT``
+     - [extent]
+     - Input extent
+
+       .. include:: ../algs_include.rst
+          :start-after: **extent_options**
+          :end-before: **end_extent_options**
+
+   * - **Extent**
+     - ``OUTPUT``
+     - [vector: polygon]
+
+       Default: ``[Create temporary layer]``
+     - Specify the output vector layer. :ref:`One of <output_parameter_widget>`:
+
+       .. include:: ../algs_include.rst
+          :start-after: **layer_output_types**
+          :end-before: **end_layer_output_types**
+
+
+Outputs
+.......
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 20 40
+
+   * - Label
+     - Name
+     - Type
+     - Description
+   * - **Extent**
+     - ``OUTPUT``
+     - [vector: polygon]
+     - The output (extent) vector layer
+
+Python code
+...........
+
+**Algorithm ID**: ``native:extenttolayer``
+
+.. include:: ../algs_include.rst
+  :start-after: **algorithm_code_section**
+  :end-before: **end_algorithm_code_section**
+
+
+.. _qgispointtolayer:
+
+Create layer from point
+-----------------------------
+
+Creates a new vector layer that contains a single feature with
+geometry matching a point parameter.
+It can be used in models to convert a point into a point layer for
+algorithms which require a layer based input.
+
+.. seealso:: :ref:`qgisextenttolayer`
+
+Parameters
+..........
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 20 40
+
+   * - Label
+     - Name
+     - Type
+     - Description
+   * - **Point**
+     - ``INPUT``
+     - [coordinates]
+     - Input point, including CRS info
+       (example: ``397254,6214446 [EPSG:32632]``).
+
+       If the CRS is not provided, the Project CRS will be used.
+
+       The point can be specified by clicking on the map canvas.
+   * - **Point**
+     - ``OUTPUT``
+     - [vector: point]
+
+       Default: ``[Create temporary layer]``
+     - Specify the output layer.
+       :ref:`One of <output_parameter_widget>`:
+
+       .. include:: ../algs_include.rst
+          :start-after: **layer_output_types**
+          :end-before: **end_layer_output_types**
+
+Outputs
+.......
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 20 40
+
+   * - Label
+     - Name
+     - Type
+     - Description
+   * - **Point**
+     - ``OUTPUT``
+     - [vector: point]
+     - The output point vector layer containing the input point.
+
+Python code
+...........
+
+**Algorithm ID**: ``native:pointtolayer``
+
+.. include:: ../algs_include.rst
+  :start-after: **algorithm_code_section**
+  :end-before: **end_algorithm_code_section**
+
+
 .. _qgiscreatepointslayerfromtable:
 
 Create points layer from table
@@ -400,6 +547,9 @@ Creates points layer from a table with columns that contain
 coordinates fields.
 
 Besides X and Y coordinates you can also specify Z and M fields.
+
+.. warning::
+ This algorithm drops existing primary keys or FID values and regenerates them in output layers.
 
 Parameters
 ..........
@@ -450,7 +600,7 @@ Parameters
      - [vector: point]
 
        Default: ``[Create temporary layer]``
-     - Specify the resulting point layer. One of:
+     - Specify the resulting point layer. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -521,7 +671,7 @@ Parameters
      - [vector: point]
 
        Default: ``[Create temporary layer]``
-     - Resulting point layer with pixel centroids. One of:
+     - Resulting point layer with pixel centroids. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -562,6 +712,9 @@ Generates a point vector layer from an input raster and polygon layer.
 The points correspond to the pixel centroids that intersect the
 polygon layer.
 
+.. warning::
+ This algorithm drops existing primary keys or FID values and regenerates them in output layers.
+
 
 .. figure:: img/points_centroids_polygon.png
   :align: center
@@ -592,7 +745,7 @@ Parameters
      - [vector: point]
 
        Default: ``[Create temporary layer]``
-     - Resulting point layer of pixel centroids. One of:
+     - Resulting point layer of pixel centroids. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -670,7 +823,7 @@ Parameters
 
        Default: ``[Create temporary layer]``
      - Specify the point vector layer for the geotagged photos.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types_skip**
@@ -680,11 +833,11 @@ Parameters
 
        Optional
      - ``INVALID``
-     - [table]
+     - [vector: table]
 
        Default: ``[Skip output]``
      - Specify the table of unreadable or non-geotagged photos.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types_skip**
@@ -711,7 +864,7 @@ Outputs
 
        Optional
      - ``INVALID``
-     - [table]
+     - [vector: table]
      - Table of unreadable or non-geotagged photos can
        also be created.
 
@@ -771,8 +924,6 @@ Parameters
      - Field or expression providing the order to connect the points in the path.
        If not set, the feature ID (``$id``) is used.
    * - **Sort text containing numbers naturally**
-
-       Optional
      - ``NATURAL_SORT``
      - [boolean]
 
@@ -792,7 +943,7 @@ Parameters
      - [vector: line]
 
        Default: ``[Create temporary layer]``
-     - Specify the line vector layer of the path. One of:
+     - Specify the line vector layer of the path. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -806,7 +957,7 @@ Parameters
 
        Default: ``[Skip output]``
      - Specify the directory that will contain the description
-       files of points and paths. One of:
+       files of points and paths. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **directory_output_types_skip**
@@ -875,6 +1026,9 @@ the lines).
 A minimum distance can be specified, to avoid points being too close
 to each other.
 
+.. warning::
+ This algorithm drops existing primary keys or FID values and regenerates them in output layers.
+
 .. seealso:: :ref:`qgisrandompointsonlines`
 
 Parameters
@@ -894,13 +1048,13 @@ Parameters
      - Input line vector layer
    * - **Number of points**
      - ``POINTS_NUMBER``
-     - [number]
+     - [numeric: integer]
 
        Default: 1
      - Number of points to create
    * - **Minimum distance between points**
      - ``MIN_DISTANCE``
-     - [number]
+     - [numeric: double]
 
        Default: 0.0
      - The minimum distance between points
@@ -909,7 +1063,7 @@ Parameters
      - [vector: point]
 
        Default: ``[Create temporary layer]``
-     - The output random points. One of:
+     - The output random points. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -980,13 +1134,13 @@ Basic parameters
 
    * - **Number of points**
      - ``POINTS_NUMBER``
-     - [number]
+     - [numeric: integer]
 
        Default: 1
      - Number of point to create
    * - **Minimum distance between points**
      - ``MIN_DISTANCE``
-     - [number]
+     - [numeric: double]
 
        Default: 0.0
      - The minimum distance between points
@@ -1001,7 +1155,7 @@ Basic parameters
      - [vector: point]
 
        Default: ``[Create temporary layer]``
-     - The output random points. One of:
+     - The output random points. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -1021,7 +1175,7 @@ Advanced parameters
      - Description
    * - **Maximum number of search attempts given the minimum distance**
      - ``MAX_ATTEMPTS``
-     - [number]
+     - [numeric: integer]
 
        Default: 200
      - Maximum number of attempts to place the points
@@ -1064,6 +1218,9 @@ close to each other.
 
 **Default menu**: :menuselection:`Vector --> Research Tools`
 
+.. warning::
+ This algorithm drops existing primary keys or FID values and regenerates them in output layers.
+
 Parameters
 ..........
 
@@ -1081,13 +1238,13 @@ Parameters
      - Input polygon layer defining the area
    * - **Number of points**
      - ``POINTS_NUMBER``
-     - [number]
+     - [numeric: integer]
 
        Default: 1
      - Number of points to create
    * - **Minimum distance between points**
      - ``MIN_DISTANCE``
-     - [number]
+     - [numeric: double]
 
        Default: 0.0
      - The minimum distance between points
@@ -1096,7 +1253,7 @@ Parameters
      - [vector: point]
 
        Default: ``[Create temporary layer]``
-     - The output random points. One of:
+     - The output random points. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -1195,7 +1352,7 @@ Basic parameters
      - Input polygon vector layer
    * - **Number of points for each feature**
      - ``POINTS_NUMBER``
-     - [number |dataDefine|]
+     - [numeric: integer] |dataDefine|
 
        Default: 1
      - Number of points to create
@@ -1203,7 +1360,7 @@ Basic parameters
 
        Optional
      - ``MIN_DISTANCE``
-     - [number |dataDefine|]
+     - [numeric: double] |dataDefine|
 
        Default: 0.0
      - The minimum distance between points within one polygon feature
@@ -1212,7 +1369,7 @@ Basic parameters
      - [vector: point]
 
        Default: ``[Create temporary layer]``
-     - The output random points. One of:
+     - The output random points. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -1234,7 +1391,7 @@ Advanced parameters
 
        Optional
      - ``MIN_DISTANCE_GLOBAL``
-     - [number |dataDefine|]
+     - [numeric: double] |dataDefine|
 
        Default: 0.0
      - The global minimum distance between points.
@@ -1244,7 +1401,7 @@ Advanced parameters
 
        Optional
      - ``MAX_TRIES_PER_POINT``
-     - [number |dataDefine|]
+     - [numeric: integer] |dataDefine|
 
        Default: 10
      - The maximum number of tries per point.
@@ -1254,7 +1411,7 @@ Advanced parameters
 
        Optional
      - ``SEED``
-     - [number]
+     - [numeric: integer]
 
        Default: Not set
      - The seed to use for the random number generator.
@@ -1284,20 +1441,20 @@ Outputs
      - The output random points layer.
    * - **Number of features with empty or no geometry**
      - ``FEATURES_WITH_EMPTY_OR_NO_GEOMETRY``
-     - [number]
+     - [numeric: integer]
      - 
    * - **Total number of points generated**
      - ``OUTPUT_POINTS``
-     - [number]
+     - [numeric: integer]
      - 
    * - **Number of missed points**
      - ``POINTS_MISSED``
-     - [number]
+     - [numeric: integer]
      - The number of points that could not be generated due to
        the minimum distance constraint.
    * - **Number of features with missed points**
      - ``POLYGONS_WITH_MISSED_POINTS``
-     - [number]
+     - [numeric: integer]
      - Not including features with empty or no geometry
 
 Python code
@@ -1326,6 +1483,9 @@ A minimum distance can be specified, to avoid points being too close
 to each other.
 
 **Default menu**: :menuselection:`Vector --> Research Tools`
+
+.. warning::
+ This algorithm drops existing primary keys or FID values and regenerates them in output layers.
 
 .. seealso:: :ref:`qgisrandompointsinpolygons`
 
@@ -1357,14 +1517,14 @@ Parameters
 
    * - **Point count or density**
      - ``VALUE``
-     - [number |dataDefine|]
+     - [numeric: double] |dataDefine|
 
        Default: 1.0
      - The number or density of points, depending on the chosen
        :guilabel:`Sampling strategy`.
    * - **Minimum distance between points**
      - ``MIN_DISTANCE``
-     - [number]
+     - [numeric: double]
 
        Default: 0.0
      - The minimum distance between points
@@ -1373,7 +1533,7 @@ Parameters
      - [vector: point]
 
        Default: ``[Create temporary layer]``
-     - The output random points. One of:
+     - The output random points. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -1472,7 +1632,7 @@ Basic parameters
      - Input line vector layer
    * - **Number of points for each feature**
      - ``POINTS_NUMBER``
-     - [number |dataDefine|]
+     - [numeric: integer] |dataDefine|
 
        Default: 1
      - Number of points to create
@@ -1480,7 +1640,7 @@ Basic parameters
 
        Optional
      - ``MIN_DISTANCE``
-     - [number |dataDefine|]
+     - [numeric: double] |dataDefine|
 
        Default: 0.0
      - The minimum distance between points within one line feature
@@ -1489,7 +1649,7 @@ Basic parameters
      - [vector: point]
 
        Default: ``[Create temporary layer]``
-     - The output random points. One of:
+     - The output random points. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -1511,7 +1671,7 @@ Advanced parameters
 
        Optional
      - ``MIN_DISTANCE_GLOBAL``
-     - [number |dataDefine|]
+     - [numeric: double] |dataDefine|
 
        Default: 0.0
      - The global minimum distance between points.
@@ -1521,7 +1681,7 @@ Advanced parameters
 
        Optional
      - ``MAX_TRIES_PER_POINT``
-     - [number |dataDefine|]
+     - [numeric: integer] |dataDefine|
 
        Default: 10
      - The maximum number of tries per point.
@@ -1531,7 +1691,7 @@ Advanced parameters
 
        Optional
      - ``SEED``
-     - [number]
+     - [numeric: integer]
 
        Default: Not set
      - The seed to use for the random number generator.
@@ -1561,19 +1721,19 @@ Outputs
      - The output random points layer.
    * - **Number of features with empty or no geometry**
      - ``FEATURES_WITH_EMPTY_OR_NO_GEOMETRY``
-     - [number]
+     - [numeric: integer]
      - 
    * - **Number of features with missed points**
      - ``LINES_WITH_MISSED_POINTS``
-     - [number]
+     - [numeric: integer]
      - Not including features with empty or no geometry
    * - **Total number of points generated**
      - ``POINTS_GENERATED``
-     - [number]
+     - [numeric: integer]
      - 
    * - **Number of missed points**
      - ``POINTS_MISSED``
-     - [number]
+     - [numeric: integer]
      - The number of points that could not be generated due to
        the minimum distance constraint.
 
@@ -1629,7 +1789,7 @@ Parameters
 
        Default: ``[Create temporary layer]``
      - Specify the resulting point layer of pixels centroids.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -1703,7 +1863,7 @@ Parameters
 
        Default: ``[Create temporary layer]``
      - Specify the resulting polygon layer of pixel extents.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -1776,14 +1936,14 @@ Parameters
 
    * - **Point spacing/count**
      - ``SPACING``
-     - [number]
+     - [numeric: integer]
 
        Default: 100
      - Spacing between the points, or the number of points, depending
        on whether ``Use point spacing`` is checked or not.
    * - **Initial inset from corner (LH side)**
      - ``INSET``
-     - [number]
+     - [numeric: double]
 
        Default: 0.0
      - Offsets the points relative to the upper left corner.
@@ -1811,7 +1971,7 @@ Parameters
      - [vector: point]
 
        Default: ``[Create temporary layer]``
-     - Specify the output regular point layer. One of:
+     - Specify the output regular point layer. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**

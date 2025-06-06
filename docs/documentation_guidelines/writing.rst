@@ -68,7 +68,7 @@ also possible to create block quotes with indentation. See the
 
 .. code-block::
 
-   #. In a numbered list, there should be 
+   #. In a numbered list, there should be
       three spaces when you break lines
    #. And next items directly follow
 
@@ -126,10 +126,10 @@ You can use tags to emphasize items.
      :kbd:`Ctrl+B`
 
   will show :kbd:`Ctrl+B`
-  
+
   When describing keyboard shortcuts, the following conventions
   should be used:
-  
+
   * Letter keys are displayed using uppercase: :kbd:`S`
   * Special keys are displayed with an uppercase first letter: :kbd:`Esc`
   * Key combinations are displayed with a ``+`` sign between keys,
@@ -142,6 +142,7 @@ You can use tags to emphasize items.
      ``label``
 
 * **Layer names**
+
   When referring to layers, format as inline code:
 
   .. code-block:: rst
@@ -330,7 +331,7 @@ see :ref:`figure_logo`
 
 
 Tables
-......
+------
 
 A simple table can be coded like this
 
@@ -471,7 +472,7 @@ Special Comments
 
 Sometimes, you may want to emphasize some points of the description, either to
 warn, remind or give some hints to the user. In QGIS Documentation, we use reST
-special directives such as ``.. warning::``, ``.. seealso::`, ``.. note::`` and ``.. tip::``.
+special directives such as ``.. warning::``, ``.. seealso::``, ``.. note::`` and ``.. tip::``.
 These directives generate frames that highlight your comments. See `Paragraph Level markup
 <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#paragraph-level-markup>`_
 for more information.
@@ -519,6 +520,7 @@ Which will point to:
 
 .. [1] Updates of core plugins
 
+.. _managing_screenshots:
 
 Managing Screenshots
 ====================
@@ -559,9 +561,9 @@ is located in the same folder as the referencing :file:`.rst` file.
 
 .. tip:: If you are on Ubuntu, you can use the following command to remove the
   global menu function and create smaller application screens with menus:
-  
+
   .. code-block:: bash
-  
+
     sudo apt autoremove appmenu-gtk appmenu-gtk3 appmenu-qt
 
 
@@ -572,7 +574,7 @@ Here are some additional hints for those that want to create
 screenshots for a translated user guide:
 
 Translated images should be placed in a :file:`img/<your_language>/`
-folder.  Use the same filename as the english 'original' screenshot.
+folder. Use the same filename as the english 'original' screenshot.
 
 
 Documenting Processing algorithms
@@ -606,7 +608,7 @@ guidelines:
   the Processing toolbox.
 * Avoid using "This algorithm does this and that..." as the first sentence in the
   algorithm description. Try to use more general expressions like::
-  
+
     Takes a point layer and generates a polygon layer containing the...
 
 * Avoid describing what the algorithm does by replicating its name and please
@@ -634,7 +636,7 @@ guidelines:
 
     * - **Number of points**
       - ``NUMBER_OF_POINTS``
-      - [number]
+      - [numeric: integer]
 
         Default: 1
       - Number of points to create
@@ -648,6 +650,8 @@ guidelines:
   Point vector layer                        ``vector: point``          |pointLayer|
   Line vector layer                         ``vector: line``           |lineLayer|
   Polygon vector layer                      ``vector: polygon``        |polygonLayer|
+  All spatial vector layers                 ``vector: geometry``
+  Geometryless vector layer                 ``vector: table``          |tableLayer|
   Generic vector layer                      ``vector: any``
   Vector field numeric                      ``tablefield: numeric``    |fieldFloat|
   Vector field string                       ``tablefield: string``     |fieldText|
@@ -655,24 +659,24 @@ guidelines:
   Raster layer                              ``raster``                 |rasterLayer|
   Raster band                               ``raster band``
   HTML file                                 ``html``
-  Table layer                               ``table``                  |tableLayer|
   Expression                                ``expression``             |expression|
   Point geometry                            ``coordinates``
   Extent                                    ``extent``
   CRS                                       ``crs``                    |setProjection|
   Enumeration                               ``enumeration``            |selectString|
   List                                      ``list``
-  Number                                    ``number``                 |selectNumber|
+  Integer value                             ``numeric: integer``       |selectNumber|
+  Decimal value                             ``numeric: double``        |selectNumber|
   String                                    ``string``                 |inputText|
   Boolean                                   ``boolean``                |checkbox|
   Folder path                               ``folder``
   File                                      ``file``
   Matrix                                    ``matrix``
   Layer                                     ``layer``
-  Same output type as input type            ``same as input``  
+  Same output type as input type            ``same as input``
   Definition                                ``definition``
   Point                                     ``point``
-  MultipleLayers                            ``multipleLayers``
+  Map layers                                ``layer`` ``list``
   Range                                     ``range``
   AuthConfig                                ``authconfig``
   Mesh                                      ``mesh``
@@ -766,14 +770,14 @@ to help you with the layout and the description::
        - Specification of the output layer type (temporary, file,
          GeoPackage or PostGIS table).
          Encoding can also be specified.
-  
+
   Outputs
   .......
-  
+
   .. list-table::
      :header-rows: 1
      :widths: 20 20 20 40
-  
+
      * - Label
        - Name
        - Type

@@ -48,7 +48,7 @@ Parameters
      - Digital Terrain Model raster layer
    * - **Z factor**
      - ``Z_FACTOR``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      - Vertical exaggeration.       
@@ -61,7 +61,7 @@ Parameters
      - [raster]
 
        Default: ``[Save to temporary file]``
-     - Specify the output aspect raster layer. One of:
+     - Specify the output aspect raster layer. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types**
@@ -119,6 +119,9 @@ by either relaxing (``dz_max( d ) = d * s + ci``) or amplifying (``dz_max( d ) =
 Parameters
 ..........
 
+Basic parameters
+^^^^^^^^^^^^^^^^
+
 .. list-table::
    :header-rows: 1
    :widths: 20 20 20 40
@@ -134,20 +137,20 @@ Parameters
      - Digital Terrain Model raster layer
    * - **Band number**
      - ``BAND``
-     - [number] [list]
+     - [raster band]
      - The band of the DEM to consider
    * - **Kernel radius (pixels)**
      - ``RADIUS``
-     - [number]
+     - [numeric: integer]
 
        Default: 5
      - The radius of the filter kernel (in pixels).
        Must be large enough to reach ground cells next to non-ground objects.
    * - **Terrain slope (%, pixel size/vertical units)**
      - ``TERRAIN_SLOPE``
-     - [number]
+     - [numeric: double]
 
-       Default: 30
+       Default: 30.0
      - The approximate terrain slope in ``%``.
        The terrain slope must be adjusted to account for the ratio of height units vs raster pixel dimensions.
        Used to relax the filter criterium in steeper terrain.
@@ -164,7 +167,7 @@ Parameters
        * 2 - Amplify
    * - **Standard deviation**
      - ``STANDARD_DEVIATION``
-     - [number]
+     - [numeric: double]
 
        Default: 0.1
      - The standard deviation used to calculate a 5% confidence interval applied to the height threshold.
@@ -176,7 +179,7 @@ Parameters
 
        Default: ``[Save to temporary file]``
      - Specify the filtered DEM containing only cells classified as ground.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types_skip**
@@ -190,11 +193,39 @@ Parameters
 
        Default: ``[Skip output]``
      - Specify the non-ground objects removed by the filter.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types_skip**
           :end-before: **end_file_output_types_skip**
+
+Advanced parameters
+^^^^^^^^^^^^^^^^^^^
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 20 40
+   :class: longtable
+
+   * - Label
+     - Name
+     - Type
+     - Description
+   * - **Creation options**
+
+       Optional
+     - ``CREATION_OPTIONS`` (for QGIS <= 3.42, this was ``CREATE_OPTIONS``)
+     - [string]
+
+       Default: ''
+     - For adding one or more creation options that control the
+       raster to be created (colors, block size, file
+       compression...).
+       For convenience, you can rely on predefined profiles (see
+       :ref:`GDAL driver options section <gdal_createoptions>`).
+
+       Batch Process and Model Designer: separate multiple options with a pipe
+       character (``|``).
 
 Outputs
 .......
@@ -278,7 +309,7 @@ Parameters
      - Digital Terrain Model raster layer
    * - **Z factor**
      - ``Z_FACTOR``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      - Vertical exaggeration.       
@@ -290,14 +321,14 @@ Parameters
        The default is 1 (no exaggeration).
    * - **Azimuth (horizontal angle)**
      - ``AZIMUTH``
-     - [number]
+     - [numeric: double]
 
        Default: 300.0
      - Set the horizontal angle (in degrees) of the sun (clockwise
        direction). Range: 0 to 360. 0 is north.
    * - **Vertical angle**
      - ``V_ANGLE``
-     - [number]
+     - [numeric: double]
 
        Default: 40.0
      - Set the vertical angle (in degrees) of the sun, that is the
@@ -309,7 +340,7 @@ Parameters
      - [raster]
 
        Default: ``Save to temporary file``
-     - Specify the output hillshade raster layer. One of:
+     - Specify the output hillshade raster layer. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types**
@@ -379,7 +410,7 @@ Parameters
        to calculate hypsometric curves
    * - **Step**
      - ``STEP``
-     - [number]
+     - [numeric: double]
 
        Default: 100.0
      - Vertical distance between curves
@@ -394,7 +425,7 @@ Parameters
      - ``OUTPUT_DIRECTORY``
      - [folder]
      - Specify the output folder for the hypsometric curves.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **directory_output_types**
@@ -467,7 +498,7 @@ Parameters
      - Digital Terrain Model raster layer
    * - **Z factor**
      - ``Z_FACTOR``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      - Vertical exaggeration.       
@@ -511,7 +542,7 @@ Parameters
      - [raster]
        
        Default: ``[Save to temporary file]``
-     - Specify the output relief raster layer. One of:
+     - Specify the output relief raster layer. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types**
@@ -521,11 +552,11 @@ Parameters
 
        Optional
      - ``FREQUENCY_DISTRIBUTION``
-     - [table]
+     - [vector: table]
        
        Default: ``[Skip output]``
      - Specify the CSV table for the output frequency distribution.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types_skip**
@@ -548,7 +579,7 @@ Outputs
      - The output relief raster layer
    * - **Frequency distribution**
      - ``OUTPUT``
-     - [table]
+     - [vector: table]
      - The output frequency distribution
 
 Python code
@@ -595,7 +626,7 @@ Parameters
      - Digital Terrain Model raster layer
    * - **Z factor**
      - ``Z_FACTOR``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      - Vertical exaggeration.       
@@ -610,7 +641,7 @@ Parameters
      - [raster]
        
        Default: ``[Save to temporary file]``
-     - Specify the output ruggedness raster layer. One of:
+     - Specify the output ruggedness raster layer. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types**
@@ -671,7 +702,7 @@ Parameters
      - Digital Terrain Model raster layer
    * - **Z factor**
      - ``Z_FACTOR``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      - Vertical exaggeration.       
@@ -686,7 +717,7 @@ Parameters
      - [raster]
        
        Default: ``[Save to temporary file]``
-     - Specify the output slope raster layer. One of:
+     - Specify the output slope raster layer. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types**

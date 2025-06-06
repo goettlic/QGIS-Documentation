@@ -99,7 +99,7 @@ Supported formats
 =================
 
 QGIS accesses mesh data using the `MDAL drivers <https://github.com/lutraconsulting/MDAL>`_,
-and natively supports a `variety of formats <https://github.com/lutraconsulting/MDAL#supported-formats>`__.
+and natively supports a `variety of formats <https://github.com/lutraconsulting/MDAL?tab=readme-ov-file#supported-formats>`__.
 Whether QGIS can edit a mesh layer depends on the format and the mesh
 structure type.
 
@@ -205,14 +205,19 @@ the selected mesh, including:
   Both regular datasets (i.e. their data is stored in the file) and virtual
   datasets (which are :ref:`calculated on the fly <mesh_calculator>`) are listed.
 
-  * Use the |add| :guilabel:`Assign extra dataset to mesh` button to add more
-    groups to the current mesh layer.
-  * |collapseTree| :guilabel:`Collapse all` and |expandTree| :guilabel:`Expand
+  * Use the |symbologyAdd| :sup:`Assign Extra Dataset to Mesh` button to add more
+    groups to the current mesh layer. You can add dataset group to a mesh layer with the same name,
+    but not from the same URI. Dataset group names are automatically renamed to
+    "Original Name_Number".
+  * Use |symbologyRemove| :sup:`Remove Extra Dataset from Mesh` to remove additional datasets
+    groups from the mesh layer. Note that only dataset groups not associated with the
+    mesh source file can be removed.
+  * |collapseTree| :sup:`Collapse all` and |expandTree| :sup:`Expand
     all` the dataset tree, in case of embedded groups
   * If you are interested in few datasets, you can uncheck the others and
     make them unavailable in the project
   * Double-click over a name and you can rename the dataset.
-  * |refresh| :guilabel:`Reset to defaults`: checks all the groups and
+  * |refresh| :sup:`Reset to defaults`: checks all the groups and
     renames them back to their original name in the provider.
   * Right-click over a virtual dataset group and you can:
 
@@ -229,7 +234,7 @@ the selected mesh, including:
   * :guilabel:`Display dataset`: e.g., for the "bed elevation" dataset which is
     not time aware
   * extract a particular date time: the dataset matching the provided time
-    is rendered and stay fixed during map navigation.
+    is rendered and stays fixed during map navigation.
 
 
 .. _meshsymbology:
@@ -307,9 +312,13 @@ visualization options of contours for the selected group, as shown in
   with the :ref:`interpolated line renderer <interpolated_line_symbol>`)
 * Use the slider or the spinbox to set the :guilabel:`Opacity` of the current
   group, if of a 2D mesh type.
-* Enter the range of values you want to represent on the current group:
+* |radioButtonOn| :guilabel:`User Defined` allows you to enter the range of values you want to represent on the current group:
   use |refresh| :sup:`Load` to fetch the min and max values of the current group
   or enter custom values if you want to exclude some.
+* Select |radioButtonOn| :guilabel:`Min/Max` to set the renderer's minimum and maximum values based on the chosen extent.
+* :guilabel:`Statictics extent` can be :guilabel:`Whole mesh`, :guilabel:`Current canvas` or :guilabel:`Updated canvas`.
+  :guilabel:`Updated canvas` means that min/max values used for the rendering
+  will change with the canvas extent (dynamic stretching).
 * For 2D/3D meshes, select the :guilabel:`Resampling method` to interpolate the
   values on the surrounding vertices to the faces (or from the surrounding faces
   to the vertices) using the :guilabel:`Neighbour average` method. Depending on
@@ -439,7 +448,7 @@ averaging/interpolation methods to handle this.
 You can select the method to derive the 2D datasets and corresponding parameters
 (level index, depth or height values). For each method, an example of application
 is shown in the dialog but you can read more on the methods at
-https://fvwiki.tuflow.com/index.php?title=Depth_Averaging_Results.
+https://fvwiki.tuflow.com/Depth_Averaging_Results.
 
 
 .. _meshlabels:
@@ -447,7 +456,7 @@ https://fvwiki.tuflow.com/index.php?title=Depth_Averaging_Results.
 Labels Properties
 -----------------
 
-The |labelingSingle| :guilabel:`Labels` offers you dynamic labeling of mesh vertices
+The |labelingSingle| :guilabel:`Labels` tab offers you dynamic labeling of mesh vertices
 and native mesh faces based on geometric properties and custom expressions. This
 dialog can also be accessed from the :guilabel:`Layer Styling` panel.
 
@@ -657,9 +666,9 @@ Elevation Properties
 --------------------
 
 The |elevationscale| :guilabel:`Elevation` tab provides options to control
-the layer elevation properties within a :ref:`3D map view <label_3dmapview>`
+the layer elevation properties within a :ref:`3D map view <label_3dmapview>` and :ref:`2D map view <label_mapview>`
 and its appearance in the :ref:`profile tool charts <label_elevation_profile_view>`.
-Specifically, you can set:
+Specifically, you can configure how heights from your dataset are interpreted:
 
 .. _figure_mesh_elevation:
 
@@ -668,9 +677,29 @@ Specifically, you can set:
 
    Mesh Elevation properties
 
-* :guilabel:`Elevation Surface`: how the mesh layer vertices Z values
+* :guilabel:`From vertices`: how the mesh layer vertices Z values
   should be interpreted as terrain elevation.
   You can apply a :guilabel:`Scale` factor and an :guilabel:`Offset`.
+  This setting is available for :ref:`3D map view <label_3dmapview>`
+  and :ref:`profile tool charts <label_elevation_profile_view>`.
+* :guilabel:`Fixed Elevation Range`: the mesh layer is linked to a fixed elevation range.
+  This mode is applicable when a layer has either a single fixed elevation or a range (slice)
+  of elevation values. If a range is specified, mesh values will be extruded over this range.
+  You can set the :guilabel:`Lower` and :guilabel:`Upper`
+  elevation range values for the layer, and specify whether the lower or upper :guilabel:`Limits`
+  are inclusive or exclusive.
+  When enabled, the layer will only be visible in :ref:`elevation filtered 2D maps <elevation_controller>`
+  when the layer's range is included in the map's Z range.
+* :guilabel:`Fixed Elevation Range Per Group`: each group in the mesh layer
+  is associated with a fixed elevation range. This mode can be used when a layer
+  has elevation data exposed through different dataset groups.
+  This feature is exposed as a user-editable table for dataset groups with lower and upper values.
+  You can either populate the lower and upper values manually
+  or use an |expression| :guilabel:`Expression` to auto-fill all group values based on an expression.
+  When enabled, the layer will be filtered in the :ref:`2D map view <label_mapview>`,
+  displaying only values within the map filter ranges.
+  In :ref:`3D map view <label_3dmapview>` or :ref:`profile tool charts <label_elevation_profile_view>`, 
+  the full extent of the layer will be displayed, ignoring the filtering.
 * :guilabel:`Profile Chart Appearance`: controls the rendering
   of the mesh elements elevation in the profile chart.
   The profile :guilabel:`Style` can be set as:
@@ -712,7 +741,7 @@ if they still are necessary) or create a copy (only geometries) of the layer.
 .. note:: QGIS does not allow to digitize edges on mesh layers.
    Only vertices and faces are mesh elements that can be created.
    Also not all supported mesh formats can be edited in QGIS
-   (see `permissions <https://github.com/lutraconsulting/MDAL#supported-formats>`__).
+   (see `permissions <https://github.com/lutraconsulting/MDAL?tab=readme-ov-file#supported-formats>`__).
 
 
 Overview of the mesh digitizing tools
@@ -844,6 +873,18 @@ coordinates).
 Selecting mesh elements
 -----------------------
 
+To select mesh elements, you can use the following tools:
+
+* |meshDigitizing| :sup:`Digitize Mesh Elements` to select different mesh elements, see more at :ref:`digitize_mesh_elements`.
+* |meshSelectPolygon| :sup:`Select Mesh Elements by Polygon` to select different mesh elements by polygon,
+  see more at :ref:`select_mesh_by_polygon`.
+* |meshSelectExpression| :sup:`Select Mesh Elements by Expression` to select different mesh elements by expression,
+  you can choose to :guilabel:`Select by vertices` or :guilabel:`Select by faces`, see more at :ref:`select_mesh_by_expression`.
+* |meshSelectIsolatedVertices| :sup:`Select Isolated Vertices`  to select all vertices that are not part of any mesh face.
+* |meshSelectAll| :sup:`Select All Vertices` to select all vertices of the mesh layer.
+
+.. _digitize_mesh_elements:
+
 Using :guilabel:`Digitize Mesh Elements`
 ........................................
 
@@ -862,6 +903,8 @@ Hover over an element and it gets highlighted, allowing you to select it.
 * To remove an element from the selection, press :kbd:`Ctrl` and reselect it.
   A deselected face will also deselect all their vertices.
 
+.. _select_mesh_by_polygon:
+
 Using :guilabel:`Select Mesh Elements by Polygon`
 .................................................
 
@@ -879,6 +922,8 @@ Activate the |meshSelectPolygon| :sup:`Select Mesh Elements by Polygon` tool and
 * To add elements to a selection, press :kbd:`Shift` while selecting them.
 * To remove an element from the selection, press :kbd:`Ctrl` while drawing
   over the selection polygon.
+
+.. _select_mesh_by_expression:
 
 Using :guilabel:`Select Mesh Elements by Expression`
 ....................................................
@@ -903,6 +948,7 @@ Another tool for mesh elements selection is |meshSelectExpression|
    * |selectAdd| :guilabel:`Add to current selection`
    * |selectRemove| :guilabel:`Remove from current selection`
 
+
 Modifying mesh elements
 ------------------------
 
@@ -923,6 +969,11 @@ To add vertices to a mesh layer:
    * inside a face: splits the face into triangles whose edges connect
      the surrounding vertices to the new vertex.
 
+     With the :guilabel:`Refine neighboring faces when adding vertices` option enabled
+     in the |meshDigitizing| :sup:`Digitize mesh elements` button drop-down menu,
+     a check is applied to triangular faces that share at least one vertex with the face the new vertex is added to.
+     If their edges do not satisfy Delaunay triangulation rules, they are flipped accordingly.
+
 Adding faces
 ............
 
@@ -931,10 +982,10 @@ To add faces to a mesh layer:
 #. Press the |meshDigitizing| :sup:`Digitize mesh elements` button
 #. A :guilabel:`Vertex Z value` widget appears on the top right corner of the map canvas.
    Set this value to the Z coordinate you would like to assign to the subsequent vertices.
-#. Hover over a vertex and click the small triangle that appears next it.
+#. Hover over a vertex and click the small triangle that appears next to it.
 #. Move the cursor to the next vertex position;
    you can snap to existing vertex or left-click to add a new one.
-#. Proceed as above to add as many vertices you wish for the face.
+#. Proceed as above to add as many vertices as you wish for the face.
    Press :kbd:`Backspace` button to undo the last vertex.
 #. While moving the mouse, a rubberband showing the shape of the face is displayed.
    If it is shown in green, then the expected face is valid
@@ -1206,8 +1257,6 @@ the expression to execute.
 
 .. |3d| image:: /static/common/3d.png
    :width: 1.5em
-.. |add| image:: /static/common/mActionAdd.png
-   :width: 1.5em
 .. |addMeshLayer| image:: /static/common/mActionAddMeshLayer.png
    :width: 1.5em
 .. |allEdits| image:: /static/common/mActionAllEdits.png
@@ -1260,7 +1309,11 @@ the expression to execute.
    :width: 1.5em
 .. |meshReindex| image:: /static/common/mActionMeshReindex.png
    :width: 1.5em
+.. |meshSelectAll| image:: /static/common/mActionMeshSelectAll.png
+   :width: 1.5em
 .. |meshSelectExpression| image:: /static/common/mActionMeshSelectExpression.png
+   :width: 1.5em
+.. |meshSelectIsolatedVertices| image:: /static/common/mActionMeshSelectIsolatedVertices.png
    :width: 1.5em
 .. |meshSelectPolygon| image:: /static/common/mActionMeshSelectPolygon.png
    :width: 1.5em
@@ -1280,6 +1333,8 @@ the expression to execute.
    :width: 1.5em
 .. |metadata| image:: /static/common/metadata.png
    :width: 1.5em
+.. |radioButtonOn| image:: /static/common/radiobuttonon.png
+   :width: 1.5em
 .. |redo| image:: /static/common/mActionRedo.png
    :width: 1.5em
 .. |refresh| image:: /static/common/mActionRefresh.png
@@ -1298,6 +1353,10 @@ the expression to execute.
    :width: 1.5em
 .. |symbology| image:: /static/common/symbology.png
    :width: 2em
+.. |symbologyAdd| image:: /static/common/symbologyAdd.png
+   :width: 1.5em
+.. |symbologyRemove| image:: /static/common/symbologyRemove.png
+   :width: 1.5em
 .. |system| image:: /static/common/system.png
    :width: 1.5em
 .. |temporal| image:: /static/common/temporal.png

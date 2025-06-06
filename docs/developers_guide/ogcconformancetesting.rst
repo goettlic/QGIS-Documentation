@@ -14,7 +14,7 @@ The Open Geospatial Consortium (OGC) provides tests which can be run free of
 charge to make sure a server is compliant with a certain specification.  This
 chapter provides a quick tutorial to setup the WMS and OGC API Features tests
 on an Ubuntu system. A detailed documentation can be found at the
-`OGC website <https://www.ogc.org/compliance>`_.
+`OGC website <https://www.ogc.org/announcement/compliance-testing-is-now-available-for-implementations-of-the-ogc-api-features-part-1-core-standard/>`_.
 
 
 pyogctest
@@ -26,10 +26,9 @@ virtual environment:
 
 .. code-block:: bash
 
-   git clone https://github.com/pblottiere/pyogctest
    virtualenv venv
    source venv/bin/activate
-   pip install -e pyogctest/
+   pip install pyogctest
 
 
 WMS 1.3.0 test suite
@@ -40,7 +39,7 @@ needed.  It can be downloaded using **pyogctest**:
 
 .. code-block:: bash
 
-  ./pyogctest.py -s wms130 --download
+  pyogctest -s wms130 --download
 
 After the download, a ``teamengine_wms_130.qgs`` project is available in the
 new ``data`` directory. This project has to be registered as the default
@@ -59,7 +58,7 @@ Server generate a valid XML document:
 
 .. code-block:: bash
 
-  ./pyogctest.py -s wms130 -m http://XXX.XXX.XXX.XXX/metadata
+  pyogctest -s wms130 -m http://XXX.XXX.XXX.XXX/metadata
 
 
 Now that everything is properly configured, we can run the WMS 1.3.0 test
@@ -67,7 +66,7 @@ suite:
 
 .. code-block:: bash
 
-  ./pyogctest.py -s wms130 -u http://XXX.XXX.XXX.XXX/qgisserver
+  pyogctest -s wms130 -u http://XXX.XXX.XXX.XXX/qgisserver
   ========================== OGC test session starts ============================
   testsuite: WMS 1.3.0
   collected 184 items
@@ -106,7 +105,7 @@ test suite:
 
 .. code-block:: bash
 
-  ./pyogctest.py -s ogcapif -u http://XXX.XXX.XXX.XXX/qgisserver
+  pyogctest -s ogcapif -u http://XXX.XXX.XXX.XXX/qgisserver
 
   =========================== OGC test session starts ============================
   collected 56 items

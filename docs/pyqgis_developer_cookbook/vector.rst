@@ -73,18 +73,25 @@ by calling :meth:`fields() <qgis.core.QgsVectorLayer.fields>` on a
 
 .. testcode:: vectors
 
-    vlayer = QgsVectorLayer("testdata/airports.shp", "airports", "ogr")
+    vlayer = QgsVectorLayer("testdata/data/data.gpkg|layername=airports", "Airports layer", "ogr")
     for field in vlayer.fields():
         print(field.name(), field.typeName())
 
 
 .. testoutput:: vectors
 
-    ID Integer64
-    fk_region Integer64
-    ELEV Real
-    NAME String
-    USE String
+    fid Integer64
+    id Integer64
+    scalerank Integer64
+    featurecla String
+    type String
+    name String
+    abbrev String
+    location String
+    gps_code String
+    iata_code String
+    wikipedia String
+    natlscale Real
 
 The :meth:`displayField() <qgis.core.QgsVectorLayer.displayField>` and
 :meth:`mapTipTemplate() <qgis.core.QgsMapLayer.mapTipTemplate>` methods provide
@@ -96,13 +103,13 @@ methods you can easily get both:
 
 .. testcode:: vectors
 
-    vlayer = QgsVectorLayer("testdata/airports.shp", "airports", "ogr")
+    vlayer = QgsVectorLayer("testdata/data/data.gpkg|layername=airports", "Airports layer", "ogr")
     print(vlayer.displayField())
 
 
 .. testoutput:: vectors
 
-    NAME
+    name
 
 .. note:: If you change the ``Display Name`` from a field to an expression, you have to
    use :meth:`displayExpression() <qgis.core.QgsVectorLayer.displayExpression>`
@@ -703,7 +710,7 @@ field:
 
 .. testcode:: vectors
 
-    vlayer = QgsVectorLayer("testdata/airports.shp", "airports", "ogr")
+    vlayer = QgsVectorLayer("testdata/data/data.gpkg|layername=airports", "Airports layer", "ogr")
     feat = QgsVectorLayerUtils.createFeature(vlayer)
 
 
@@ -712,7 +719,7 @@ you to quickly get the values of a field or expression:
 
 .. testcode:: vectors
 
-    vlayer = QgsVectorLayer("testdata/airports.shp", "airports", "ogr")
+    vlayer = QgsVectorLayer("testdata/data/data.gpkg|layername=airports", "Airports layer", "ogr")
     # select only the first feature to make the output shorter
     vlayer.selectByIds([1])
     val = QgsVectorLayerUtils.getValues(vlayer, "NAME", selectedOnly=True)
@@ -720,7 +727,7 @@ you to quickly get the values of a field or expression:
 
 .. testoutput:: vectors
 
-    (['AMBLER'], True)
+    (['Sahnewal'], True)
 
 
 .. index:: Vector layers; Creating
@@ -1127,7 +1134,7 @@ instance you can follow the example code:
 
 .. testoutput:: vectors
 
-    {'angle': '0', 'cap_style': 'square', 'color': '255,0,0,255,rgb:1,0,0,1', 'horizontal_anchor_point': '1', 'joinstyle': 'bevel', 'name': 'square', 'offset': '0,0', 'offset_map_unit_scale': '3x:0,0,0,0,0,0', 'offset_unit': 'MM', 'outline_color': '35,35,35,255,rgb:0.13725490196078433,0.13725490196078433,0.13725490196078433,1', 'outline_style': 'solid', 'outline_width': '0', 'outline_width_map_unit_scale': '3x:0,0,0,0,0,0', 'outline_width_unit': 'MM', 'scale_method': 'diameter', 'size': '2', 'size_map_unit_scale': '3x:0,0,0,0,0,0', 'size_unit': 'MM', 'vertical_anchor_point': '1'}
+    {'angle': '0', 'cap_style': 'square', 'color': '255,0,0,255,rgb:1,0,0,1', 'horizontal_anchor_point': '1', 'joinstyle': 'bevel', 'name': 'square', 'offset': '0,0', 'offset_map_unit_scale': '3x:0,0,0,0,0,0', 'offset_unit': 'MM', 'outline_color': '35,35,35,255,rgb:0.1372549,0.1372549,0.1372549,1', 'outline_style': 'solid', 'outline_width': '0', 'outline_width_map_unit_scale': '3x:0,0,0,0,0,0', 'outline_width_unit': 'MM', 'scale_method': 'diameter', 'size': '2', 'size_map_unit_scale': '3x:0,0,0,0,0,0', 'size_unit': 'MM', 'vertical_anchor_point': '1'}
 
 This can be useful if you want to alter some properties:
 
@@ -1230,8 +1237,8 @@ arrangement)
 
   from qgis.PyQt import QtGui
 
-  myVectorLayer = QgsVectorLayer("testdata/airports.shp", "airports", "ogr")
-  myTargetField = 'ELEV'
+  myVectorLayer = QgsVectorLayer("testdata/data/data.gpkg|layername=airports", "Airports layer", "ogr")
+  myTargetField = 'scalerank'
   myRangeList = []
   myOpacity = 1
   # Make our first symbol and range...
@@ -1681,4 +1688,4 @@ Further Topics
 * exploring symbol layer and renderer registries
 
 
-.. _supported formats by OGR: https://gdal.org/drivers/vector/index.html
+.. _supported formats by OGR: https://gdal.org/en/latest/drivers/vector/index.html

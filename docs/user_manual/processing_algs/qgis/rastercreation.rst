@@ -52,22 +52,22 @@ Basic parameters
      - CRS for the output raster layer
    * - **Pixel size**
      - ``PIXEL_SIZE``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      - Pixel size (X=Y) in map units.
    * - **Constant value**
      - ``NUMBER``
-     - [number]
+     - [numeric: double]
 
-       Default: 1
+       Default: 1.0
      - Constant pixel value for the output raster layer.
    * - **Constant**
      - ``OUTPUT``
      - [raster]
 
        Default: ``[Save to temporary file]``
-     - Specification of the output raster. One of:
+     - Specification of the output raster. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types**
@@ -98,6 +98,21 @@ Advanced parameters
        * 4 --- Unsigned Integer32
        * 5 --- Float32
        * 6 --- Float64
+   * - **Creation options**
+
+       Optional
+     - ``CREATION_OPTIONS`` (for QGIS <= 3.42, this was ``CREATE_OPTIONS``)
+     - [string]
+
+       Default: ''
+     - For adding one or more creation options that control the
+       raster to be created (colors, block size, file
+       compression...).
+       For convenience, you can rely on predefined profiles (see
+       :ref:`GDAL driver options section <gdal_createoptions>`).
+
+       Batch Process and Model Designer: separate multiple options with a pipe
+       character (``|``).
 
 Outputs
 .......
@@ -172,7 +187,7 @@ Basic parameters
      - CRS for the output raster layer
    * - **Pixel size**
      - ``PIXEL_SIZE``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      - Pixel size (X=Y) in map units.
@@ -181,7 +196,7 @@ Basic parameters
      - [raster]
 
        Default: ``[Save to temporary file]``
-     - Specification of the output raster. One of:
+     - Specification of the output raster. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types**
@@ -213,16 +228,31 @@ Advanced parameters
        * 5 --- Float64
    * - **N**
      - ``N``
-     - [number]
+     - [numeric: integer]
 
        Default: 10
      -
    * - **Probability**
      - ``PROBABILITY``
-     - [number]
+     - [numeric: double]
 
        Default: 0.5
      -
+   * - **Creation options**
+
+       Optional
+     - ``CREATION_OPTIONS`` (for QGIS <= 3.42, this was ``CREATE_OPTIONS``)
+     - [string]
+
+       Default: ''
+     - For adding one or more creation options that control the
+       raster to be created (colors, block size, file
+       compression...).
+       For convenience, you can rely on predefined profiles (see
+       :ref:`GDAL driver options section <gdal_createoptions>`).
+
+       Batch Process and Model Designer: separate multiple options with a pipe
+       character (``|``).
 
 Outputs
 .......
@@ -296,7 +326,7 @@ Basic parameters
      - CRS for the output raster layer
    * - **Pixel size**
      - ``PIXEL_SIZE``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      - Pixel size (X=Y) in map units.
@@ -305,7 +335,7 @@ Basic parameters
      - [raster]
 
        Default: ``[Save to temporary file]``
-     - Specification of the output raster. One of:
+     - Specification of the output raster. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types**
@@ -333,10 +363,25 @@ Advanced parameters
        * 1 --- Float64
    * - **Lambda**
      - ``LAMBDA``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      -
+   * - **Creation options**
+
+       Optional
+     - ``CREATION_OPTIONS`` (for QGIS <= 3.42, this was ``CREATE_OPTIONS``)
+     - [string]
+
+       Default: ''
+     - For adding one or more creation options that control the
+       raster to be created (colors, block size, file
+       compression...).
+       For convenience, you can rely on predefined profiles (see
+       :ref:`GDAL driver options section <gdal_createoptions>`).
+
+       Batch Process and Model Designer: separate multiple options with a pipe
+       character (``|``).
 
 Outputs
 .......
@@ -410,7 +455,7 @@ Basic parameters
      - CRS for the output raster layer
    * - **Pixel size**
      - ``PIXEL_SIZE``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      - Pixel size (X=Y) in map units.
@@ -419,7 +464,7 @@ Basic parameters
      - [raster]
 
        Default: ``[Save to temporary file]``
-     - Specification of the output raster. One of:
+     - Specification of the output raster. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types**
@@ -447,16 +492,31 @@ Advanced parameters
        * 1 --- Float64
    * - **Alpha**
      - ``ALPHA``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      -
    * - **Beta**
      - ``BETA``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      -
+   * - **Creation options**
+
+       Optional
+     - ``CREATION_OPTIONS`` (for QGIS <= 3.42, this was ``CREATE_OPTIONS``)
+     - [string]
+
+       Default: ''
+     - For adding one or more creation options that control the
+       raster to be created (colors, block size, file
+       compression...).
+       For convenience, you can rely on predefined profiles (see
+       :ref:`GDAL driver options section <gdal_createoptions>`).
+
+       Batch Process and Model Designer: separate multiple options with a pipe
+       character (``|``).
 
 Outputs
 .......
@@ -531,7 +591,7 @@ Basic parameters
      - CRS for the output raster layer
    * - **Pixel size**
      - ``PIXEL_SIZE``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      - Pixel size (X=Y) in map units.
@@ -540,7 +600,7 @@ Basic parameters
      - [raster]
 
        Default: ``[Save to temporary file]``
-     - Specification of the output raster. One of:
+     - Specification of the output raster. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types**
@@ -572,10 +632,25 @@ Advanced parameters
        * 5 --- Float64
    * - **Probability**
      - ``PROBABILITY``
-     - [number]
+     - [numeric: double]
 
        Default: 0.5
      -
+   * - **Creation options**
+
+       Optional
+     - ``CREATION_OPTIONS`` (for QGIS <= 3.42, this was ``CREATE_OPTIONS``)
+     - [string]
+
+       Default: ''
+     - For adding one or more creation options that control the
+       raster to be created (colors, block size, file
+       compression...).
+       For convenience, you can rely on predefined profiles (see
+       :ref:`GDAL driver options section <gdal_createoptions>`).
+
+       Batch Process and Model Designer: separate multiple options with a pipe
+       character (``|``).
 
 Outputs
 .......
@@ -650,7 +725,7 @@ Basic parameters
      - CRS for the output raster layer
    * - **Pixel size**
      - ``PIXEL_SIZE``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      - Pixel size (X=Y) in map units.
@@ -659,7 +734,7 @@ Basic parameters
      - [raster]
 
        Default: ``[Save to temporary file]``
-     - Specification of the output raster. One of:
+     - Specification of the output raster. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types**
@@ -691,16 +766,31 @@ Advanced parameters
        * 5 --- Float64
    * - **Distribution parameter k**
      - ``K_PARAMETER``
-     - [number]
+     - [numeric: integer]
 
        Default: 10
      -
    * - **Probability**
      - ``PROBABILITY``
-     - [number]
+     - [numeric: double]
 
        Default: 0.5
      -
+   * - **Creation options**
+
+       Optional
+     - ``CREATION_OPTIONS`` (for QGIS <= 3.42, this was ``CREATE_OPTIONS``)
+     - [string]
+
+       Default: ''
+     - For adding one or more creation options that control the
+       raster to be created (colors, block size, file
+       compression...).
+       For convenience, you can rely on predefined profiles (see
+       :ref:`GDAL driver options section <gdal_createoptions>`).
+
+       Batch Process and Model Designer: separate multiple options with a pipe
+       character (``|``).
 
 Outputs
 .......
@@ -774,7 +864,7 @@ Basic parameters
      - CRS for the output raster layer
    * - **Pixel size**
      - ``PIXEL_SIZE``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      - Pixel size (X=Y) in map units.
@@ -783,7 +873,7 @@ Basic parameters
      - [raster]
 
        Default: ``[Save to temporary file]``
-     - Specification of the output raster. One of:
+     - Specification of the output raster. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types**
@@ -811,16 +901,31 @@ Advanced parameters
        * 1 --- Float64
    * - **Mean of normal distribution**
      - ``MEAN``
-     - [number]
+     - [numeric: double]
 
        Default: 0.0
      -
    * - **Standard deviation of normal distribution**
      - ``STDDEV``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      -
+   * - **Creation options**
+
+       Optional
+     - ``CREATION_OPTIONS`` (for QGIS <= 3.42, this was ``CREATE_OPTIONS``)
+     - [string]
+
+       Default: ''
+     - For adding one or more creation options that control the
+       raster to be created (colors, block size, file
+       compression...).
+       For convenience, you can rely on predefined profiles (see
+       :ref:`GDAL driver options section <gdal_createoptions>`).
+
+       Batch Process and Model Designer: separate multiple options with a pipe
+       character (``|``).
 
 Outputs
 .......
@@ -895,7 +1000,7 @@ Basic parameters
      - CRS for the output raster layer
    * - **Pixel size**
      - ``PIXEL_SIZE``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      - Pixel size (X=Y) in map units.
@@ -904,7 +1009,7 @@ Basic parameters
      - [raster]
 
        Default: ``[Save to temporary file]``
-     - Specification of the output raster. One of:
+     - Specification of the output raster. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types**
@@ -936,10 +1041,25 @@ Advanced parameters
        * 5 --- Float64
    * - **Mean**
      - ``MEAN``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      -
+   * - **Creation options**
+
+       Optional
+     - ``CREATION_OPTIONS`` (for QGIS <= 3.42, this was ``CREATE_OPTIONS``)
+     - [string]
+
+       Default: ''
+     - For adding one or more creation options that control the
+       raster to be created (colors, block size, file
+       compression...).
+       For convenience, you can rely on predefined profiles (see
+       :ref:`GDAL driver options section <gdal_createoptions>`).
+
+       Batch Process and Model Designer: separate multiple options with a pipe
+       character (``|``).
 
 Outputs
 .......
@@ -1015,7 +1135,7 @@ Basic parameters
      - CRS for the output raster layer
    * - **Pixel size**
      - ``PIXEL_SIZE``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      - Pixel size (X=Y) in map units.
@@ -1024,7 +1144,7 @@ Basic parameters
      - [raster]
 
        Default: ``[Save to temporary file]``
-     - Specification of the output raster. One of:
+     - Specification of the output raster. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types**
@@ -1057,16 +1177,31 @@ Advanced parameters
        * 6 --- Float64
    * - **Lower bound for random number range**
      - ``LOWER_BOUND``
-     - [number]
+     - [numeric: double]
 
        Default: 0.0
      -
    * - **Upper bound for random number range**
      - ``UPPER_BOUND``
-     - [number]
+     - [numeric: double]
 
        Default: 0.0
      -
+   * - **Creation options**
+
+       Optional
+     - ``CREATION_OPTIONS`` (for QGIS <= 3.42, this was ``CREATE_OPTIONS``)
+     - [string]
+
+       Default: ''
+     - For adding one or more creation options that control the
+       raster to be created (colors, block size, file
+       compression...).
+       For convenience, you can rely on predefined profiles (see
+       :ref:`GDAL driver options section <gdal_createoptions>`).
+
+       Batch Process and Model Designer: separate multiple options with a pipe
+       character (``|``).
 
 Outputs
 .......

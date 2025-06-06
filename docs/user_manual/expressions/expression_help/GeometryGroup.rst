@@ -170,8 +170,8 @@ Returns the north-based bearing as the angle in radians measured clockwise on th
    * - Arguments
      - * **point_a** - point geometry
        * **point_b** - point geometry
-       * **source_crs** - an optional string representing the source CRS of the points. By default the current layer's CRS is used.
-       * **ellipsoid** - an optional string representing the acronym or the authority:ID (eg 'EPSG:7030') of the ellipsoid on which the bearing should be measured. By default the current project's ellipsoid setting is used.
+       * **source_crs** - an optional string or CRS object representing the source CRS of the points. By default the current layer's CRS is used.
+       * **ellipsoid** - an optional string representing the acronym or the authority ID (e.g., 'EPSG:7030') of the ellipsoid on which the bearing should be measured. By default the current project's ellipsoid setting is used.
    * - Examples
      - * ``degrees( bearing( make_point(16198544, -4534850), make_point(18736872, -1877769), 'EPSG:3857', 'EPSG:7030') )`` → 49.980071
        * ``degrees( bearing( make_point(18736872, -1877769), make_point(16198544, -4534850), 'EPSG:3857', 'WGS84') )`` → 219.282386
@@ -478,7 +478,7 @@ Returns a possibly concave polygon that contains all the points in the geometry
    * - Arguments
      - * **geometry** - a geometry
        * **target_percent** - the percentage of area of the convex hull the solution tries to approach. A target_percent of 1 gives the same result as the convex hull. A target_percent between 0 and 0.99 produces a result that should have a smaller area than the convex hull.
-       * **allow_holes** - optional argument specifying whether to allow holes within the output geometry. Defaults to FALSE, set to TRUE to avoid including holes in the output geometry.
+       * **allow_holes** - optional argument specifying whether to allow holes within the output geometry. Defaults to FALSE, set to TRUE to allow including holes in the output geometry.
    * - Examples
      - * ``geom_to_wkt(concave_hull(geom_from_wkt('MULTILINESTRING((106 164,30 112,74 70,82 112,130 94,130 62,122 40,156 32,162 76,172 88),(132 178,134 148,128 136,96 128,132 108,150 130,170 142,174 110,156 96,158 90,158 88),(22 64,66 28,94 38,94 68,114 76,112 30,132 10,168 18,178 34,186 52,184 74,190 100,190 122,182 148,178 170,176 184,156 164,146 178,132 186,92 182,56 158,36 150,62 150,76 128,88 118))'), 0.99))`` → 'Polygon ((30 112, 36 150, 92 182, 132 186, 176 184, 190 122, 190 100, 186 52, 178 34, 168 18, 132 10, 112 30, 66 28, 22 64, 30 112))'
 
@@ -1477,6 +1477,54 @@ Returns the point interpolated by a specified distance along a linestring geomet
 
 .. end_line_interpolate_point_section
 
+.. _expression_function_GeometryGroup_line_interpolate_point_by_m:
+
+line_interpolate_point_by_m
+...........................
+
+Returns the point interpolated by a matching M value along a linestring geometry.
+
+.. list-table::
+   :widths: 15 85
+
+   * - Syntax
+     - line_interpolate_point_by_m(geometry, m, [use_3d_distance=false])
+
+       [] marks optional arguments
+   * - Arguments
+     - * **geometry** - a linestring geometry
+       * **m** - an M value
+       * **use_3d_distance** - controls whether 2D or 3D distances between vertices should be used during interpolation (this option is only considered for lines with z values)
+   * - Examples
+     - * ``geom_to_wkt(line_interpolate_point_by_m(geom_from_wkt('LineStringM(0 0 0, 10 10 10)'), m:=5))`` → 'Point (5 5)'
+
+
+.. end_line_interpolate_point_by_m_section
+
+.. _expression_function_GeometryGroup_line_locate_m:
+
+line_locate_m
+.............
+
+Returns the distance along a linestring corresponding to the first matching interpolated M value.
+
+.. list-table::
+   :widths: 15 85
+
+   * - Syntax
+     - line_locate_m(geometry, m, [use_3d_distance=false])
+
+       [] marks optional arguments
+   * - Arguments
+     - * **geometry** - a linestring geometry
+       * **m** - an M value
+       * **use_3d_distance** - controls whether 2D or 3D distances between vertices should be used during interpolation (this option is only considered for lines with z values)
+   * - Examples
+     - * ``line_locate_m(geometry:=geom_from_wkt('LineStringM(0 0 0, 10 10 10)'),m:=5)`` → 7.07106
+
+
+.. end_line_locate_m_section
+
 .. _expression_function_GeometryGroup_line_locate_point:
 
 line_locate_point
@@ -2360,7 +2408,7 @@ Read more on the underlying GEOS "Intersects" predicate, as described in PostGIS
          Read more on the underlying GEOS predicate, as described in PostGIS `ST_MaximumInscribedCircle <https://postgis.net/docs/ST_MaximumInscribedCircle.html>`_ function.
 
          This argument requires GEOS >= 3.9.
-       * **return_details** - Set this to true to return a list of maps containing (key names in quotes) the feature 'id', the expression 'result' and the 'overlap' value. The 'radius' of the maximum inscribed circle is also returned when the target layer is a polygon. Only valid when used with the expression parameter
+       * **return_details** - Set this to true to return a list of maps containing (key names in quotes) the feature 'id', the expression 'result' and the 'overlap' value (of the largest element in case of multipart). The 'radius' of the maximum inscribed circle is also returned when the target layer is a polygon. Only valid when used with the expression parameter
        * **sort_by_intersection_size** - only valid when used with an expression, set this to 'des' to return the results ordered by the overlap value in descending order or set this to 'asc' for ascending order.
    * - Examples
      - * ``overlay_intersects('regions')`` → TRUE if the current feature spatially intersects a region
@@ -2660,6 +2708,25 @@ Tests whether the DE-9IM relationship between two geometries matches a specified
 
 reverse
 .......
+
+Reverses the direction of a line string or reverses a string of text.
+
+**String variant**
+
+Reverses the order of characters in a string.
+
+.. list-table::
+   :widths: 15 85
+
+   * - Syntax
+     - reverse(string)
+   * - Arguments
+     - * **string** - string to reverse
+   * - Examples
+     - * ``reverse('hello')`` → 'olleh'
+
+
+**Geometry variant**
 
 Reverses the direction of a line string by reversing the order of its vertices.
 
@@ -3150,8 +3217,8 @@ Returns the geometry transformed from a source CRS to a destination CRS.
      - transform(geometry, source_auth_id, dest_auth_id)
    * - Arguments
      - * **geometry** - a geometry
-       * **source_auth_id** - the source auth CRS ID
-       * **dest_auth_id** - the destination auth CRS ID
+       * **source_auth_id** - the source CRS definition or CRS object
+       * **dest_auth_id** - the destination CRS definition or CRS object
    * - Examples
      - * ``geom_to_wkt( transform( make_point(488995.53240249, 7104473.38600835), 'EPSG:2154', 'EPSG:4326' ) )`` → 'POINT(0 51)'
 

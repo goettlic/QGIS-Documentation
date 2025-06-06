@@ -34,6 +34,7 @@ Important OGC specifications supported by QGIS are:
 * **CSW** --- Catalog Service for the Web
 * **SFS** --- Simple Features for SQL (:ref:`label_postgis`)
 * **GML** --- Geography Markup Language
+* **SensorThings API** --- SensorThings API (:ref:`sensor_things`)
 
 OGC services are increasingly being used to exchange geospatial data between
 different GIS implementations and data stores. QGIS can deal with the above
@@ -218,6 +219,15 @@ You then need to create connections to the server you are targeting:
      allows to scale up or down the tiles based on the device screen DPI.
      Available options are :guilabel:`Undefined (not scaled)`,
      :guilabel:`Standard (96 DPI)` and :guilabel:`High (192 DPI)`.
+
+   .. _max_feature_count:
+
+   * :guilabel:`Maximum number of GetFeatureInfo results`: specifies a default value
+     for the maximum number of results returned per layer by a GetFeatureInfo request
+     using this connection (see :ref:`FEATURE_COUNT <wms_featurecount>` parameter).
+     Default value is ``10``.
+     Set to ``0`` to use server default value (usually ``1``): no FEATURE_COUNT parameter will be added to the request.
+
    * |unchecked| :guilabel:`Ignore GetMap/GetTile/GetLegendGraphic URI reported in capabilities`:
      if checked, use given URI from the :guilabel:`URL` field above.
    * |unchecked| :guilabel:`Ignore GetFeatureInfo URI reported in capabilities`:
@@ -311,7 +321,9 @@ You can define:
 * :guilabel:`Request step size`: if you want to reduce the effect of cut labels at tile borders,
   increasing the step size creates larger requests, fewer tiles and fewer borders.
   The default value is 2000.
-* The :guilabel:`Maximum number of GetFeatureInfo results` from the server
+* The :guilabel:`Maximum number of GetFeatureInfo results`: specifies the maximum number of results
+  returned by a GetFeatureInfo request, for the layer(s) being loaded.
+  Allows to override the :ref:`connection's default value <max_feature_count>` for specific layers.
 
 * Each WMS layer can be presented in multiple CRSs, depending on the capability of
   the WMS server. If you select a WMS from the list, a field with the default projection
@@ -326,11 +338,6 @@ You can define:
   WMS Server supports this feature. Then only the relevant legend for your current
   map view extent will be shown and thus will not include legend items for items
   you can't see in the current map.
-
-At the bottom of the dialog, a :guilabel:`Layer name` text field displays the
-selected item's :guilabel:`Title`. You can change the name at your will.
-This name will appear in the :guilabel:`Layers` panel after you pressed the
-:guilabel:`Add` button and loaded the layer(s) in QGIS.
 
 You can select several layers at once, but only one image style per layer.
 When several layers are selected, they will be combined at the WMS server
@@ -640,14 +647,66 @@ network settings (especially proxy). It is also possible to select cache mode
 ('always cache', 'prefer cache', 'prefer network', 'always network'), and the provider also
 supports selection of time position, if temporal domain is offered by the server.
 
-.. warning::
+**Loading a WCS Layer**
 
-   Entering **username** and **password** in the :guilabel:`Authentication` tab
-   will keep unprotected credentials in the connection configuration. Those
-   **credentials will be visible** if, for instance, you shared the project file
-   with someone. Therefore, it's advisable to save your credentials in a
-   *Authentication configuration* instead (:guilabel:`configurations` tab).
-   See :ref:`authentication_index` for more details.
+To be able to load a WCS Layer, first create a connection to the WCS server:
+
+#. Open the :guilabel:`Data Source Manager` dialog by pressing the
+   |dataSourceManager| :sup:`Open Data Source Manager` button
+#. Enable the |addWcsLayer| :guilabel:`WCS` tab
+#. Click on :guilabel:`New...` to open the :guilabel:`Create a New WCS
+   Connection` dialog
+
+   .. _figure_OGC_create_wcs_connection:
+
+   .. figure:: img/add_connection_wcs.png
+      :align: center
+
+      Creating a connection to a WCS server
+
+   * :guilabel:`Name`: A name for the connection. This name will be used in
+     the Server Connections drop-down box so that you can distinguish it from
+     other WCS servers.
+   * :guilabel:`URL`: URL of the server providing the data. This must be a
+     resolvable host name -- the same format as you would use to open a telnet
+     connection or ping a host, i.e. the base URL only.
+     For example, you shouldn't have fragments such as ``request=GetCapabilities``
+     or ``version=1.0.0`` in your URL.
+   * :guilabel:`Authentication` (optional): using a :ref:`stored configuration
+     <authentication_workflow>` or a basic authentication with
+     :guilabel:`Username` and :guilabel:`Password`.
+
+     .. warning::
+
+      Entering **username** and **password** in the :guilabel:`Authentication`
+      tab will keep unprotected credentials in the connection configuration.
+      Those **credentials will be visible** if, for instance, you shared the
+      project file with someone. Therefore, it's advisable to save your
+      credentials in an *Authentication configuration* instead
+      (:guilabel:`Configurations` tab).
+      See :ref:`authentication_index` for more details.
+
+   * HTTP :guilabel:`Referer`
+   * |unchecked| :guilabel:`Ignore GetCoverage URI reported in capabilities`:
+     if checked, use given URI from the :guilabel:`URL` field above.
+   * |unchecked| :guilabel:`Ignore reported layer extents`: because the extent
+     reported by raster layers may be smaller than the actual area which can
+     be rendered (notably for WCS servers with symbology which takes more space
+     than the data extent), check this option to avoid cropping raster layers
+     to their reported extents, resulting in truncated symbols on the borders
+     of these layers.
+   * |unchecked| :guilabel:`Ignore axis orientation`
+   * |unchecked| :guilabel:`Invert axis orientation`
+   * |unchecked| :guilabel:`Smooth pixmap transformation`
+
+#. Press :guilabel:`OK` to create the connection.
+
+Note that any proxy settings you may have set in your preferences are also recognized.
+Also note that it is possible to :guilabel:`Load` the connection parameters
+from a :file:`.XML` file or :guilabel:`Save` them to a :file:`.XML` file. 
+
+Now we are ready to load WCS layers from the above connection.
+
 
 .. _`ogc-wfs`:
 
@@ -710,6 +769,8 @@ To be able to load a WFS Layer, first create a connection to the WFS server:
 
    * Indicate the WFS version of the server.
      If unknown, press the :guilabel:`Detect` button to automatically retrieve it.
+   * Select the :guilabel:`Preferred HTTP method` to use for requests.
+     The default is :guilabel:`GET`, but you can also select :guilabel:`POST`.
    * Define the :guilabel:`maximum number of features` retrieved in a single GetFetFeature request.
      If empty, no limit is set.
    * And depending on the WFS version, indicate whether to:
@@ -744,9 +805,6 @@ Now we are ready to load WFS layers from the above connection.
 #. Select the :guilabel:`Parks` layer in the list
 #. You can also choose whether to:
 
-   * |unchecked| :guilabel:`Use title for layer name`, showing the layer's
-     title as defined on the server in the :guilabel:`Layers` panel instead of
-     its :guilabel:`Name`
    * |checkbox| :guilabel:`Only request features overlapping the view extent`
    * :guilabel:`Change...` the layer's CRS to any other supported by the service
    * or build a query to specify particular features to retrieve from the service:
@@ -774,12 +832,131 @@ main window. Once the layer is loaded, you can identify and select a couple of
 features and view the attribute table.
 
 
+.. index:: SensorThings
+.. _sensor_things:
+
+SensorThings 
+============
+
+QGIS supports connections to `OGC SensorThings API <https://www.ogc.org/publications/standard/sensorthings/>`_,
+a standard providing an open and unified framework to interconnect IoT sensing devices,
+data, and applications over the Web.
+It is an open standard addressing the syntactic and semantic interoperability of the Internet of Things.
+It is based on the `Observations and Measurements <https://www.ogc.org/publications/standard/om/>`_ data model,
+a standardized model for observations, and for features involved in sampling when making observations.
+
+Setting connection
+-------------------------
+
+To add SensorThings data to QGIS use the |addSensorThingsLayer| :guilabel:`SensorThings`
+tab in the :guilabel:`Data Source Manager` dialog.
+
+To establish a new connection, press :guilabel:`New` (or :guilabel:`New SensorThings Connection`
+from the Browser panel) and provide :guilabel:`Name` and :guilabel:`URL`.
+Advanced options, such as :ref:`authentication <authentication_index>` and
+a :guilabel:`Referer`, can also be configured.
+
+Press :guilabel:`OK` to establish the connection.
+Then you will be able to:
+
+* :guilabel:`Edit` the SensorThings connection settings
+* :guilabel:`Remove` the SensorThings connection
+
+.. figure:: img/sensorThings_connection.png
+   :align: center
+
+   SensorThings Connection dialog
+
+Configurations can be saved to an :file:`.XML` file (:guilabel:`Save`)
+through the :guilabel:`SensorThings` entry in :guilabel:`Data Source Manager` dialog
+or its contextual menu in the :guilabel:`Browser` panel (:guilabel:`Save Connections`).
+Likewise, configurations can be added from a file (:guilabel:`Load`).
+
+Loading SensorThings data
+-------------------------
+
+Relations between layers (so-called entities) stored in a SensorThings dataset
+are expressed in the diagram below.
+
+.. figure:: img/sta_uml_diagram.png
+   :align: center
+
+   Data model Observations and Measurements
+   (Source: `Sensor Web Tutorial by SIST network <https://sist.pages.in2p3.fr/anf21-sos52north/hands-on/09_sta-example-request/>`_)
+
+Any type of entity can be loaded in QGIS, but not all are spatial data.
+To load an entity, there are :guilabel:`Layer Settings` that can be configured:
+
+* :guilabel:`Entity Type`: the entity to load from the data model as layer in QGIS
+* :guilabel:`Geometry Type`: the geometry type of the selected entity to load.
+  Press |refresh| :sup:`Check available types` to limit the list to the actually
+  supported geometry types.
+* :guilabel:`Page Size`
+* :guilabel:`Feature Limit` sets a maximum number of features to request from the service
+* :guilabel:`Extent Limit` sets a maximum extent limit for the layer, so that only features
+  within the extent are requested
+* :guilabel:`Expansions`: The data model of SensorThings provides a mechanism of expansion
+  of the results to related entities, similar to how tables are joined together in a relational database.
+  Using this approach, you can expand the selected layer to include data from other items.
+  This will flatten the relationship, creating as many parent features as children,
+  and additional properties are added as columns in the attribute table.
+
+..
+  Notice that the Observed Property contains which property is observed,
+  which is relevant if the sensor of interest monitors many properties
+  (temperature, speed, angle, etc).
+  where you can choose to expand the results to other entities in the SensorThings model.
+
+Use :guilabel:`Filter` to build a query to filter the data, using SensorThings filter syntax.
+
+.. note:: The above settings and filtering options are also available
+  for update in the layer properties dialog, :guilabel:`Source` tab, once loaded in QGIS. 
+
+Press :guilabel:`Add` to load the selected entity type as layer in QGIS.
+
+..
+  Notice that only :guilabel:`Location` and :guilabel:`Feature of Interest` contain a geometry, other
+  entities will be added as a table.
+
+Working with a vector layer from SensorThings
+------------------------------------------------
+
+A SensorThings layer is loaded in QGIS as a vector layer.
+As such, it displays the same tabs in the :ref:`layer properties <vector_properties_dialog>`
+and allows same feature interactions using the selection or identify tools.
+There are however some specificities you should consider while working with SensorThings data.
+
+Because of the data model, the result property of a SensorThings Observation is a string field.
+In case you want to use its numerical representation in for example a graduated style,
+use an expression to convert the value to real and try() in case this fails
+(e.g., ``try( to_real("Observation_result"), Null)``).
+
+In case you want to create a chart of the observations at one or more locations,
+you can install the QGIS plugin :guilabel:`Data Plotly`.
+
+#. Now select the observations at a point location in the map view.
+#. Open the plotly panel and activate the :guilabel:`Use only selected features` checkbox.
+#. Select on the x-column a date-time property and on the y-column the :guilabel:`Observation_result`.
+   This will plot the observations at that location over time.
+#. Verify to filter by a single Observed Property.
+#. Notice that the chart changes as soon as you select other locations on the map.
+
+   .. figure:: img/sensorthings-plotly-airquality.png
+      :align: center
+
+      Use Data plotly to plot the air quality observations at a location
+
+
 .. Substitutions definitions - AVOID EDITING PAST THIS LINE
    This will be automatically updated by the find_set_subst.py script.
    If you need to create a new substitution manually,
    please add it also to the substitutions.txt file in the
    source folder.
 
+.. |addSensorThingsLayer| image:: /static/common/mActionAddSensorThingsLayer.png
+   :width: 1.5em
+.. |addWcsLayer| image:: /static/common/mActionAddWcsLayer.png
+   :width: 1.5em
 .. |addWfsLayer| image:: /static/common/mActionAddWfsLayer.png
    :width: 1.5em
 .. |addWmsLayer| image:: /static/common/mActionAddWmsLayer.png
@@ -795,6 +972,8 @@ features and view the attribute table.
 .. |indicatorTemporal| image:: /static/common/mIndicatorTemporal.png
    :width: 1.5em
 .. |kde| image:: /static/common/kde.png
+   :width: 1.5em
+.. |refresh| image:: /static/common/mActionRefresh.png
    :width: 1.5em
 .. |search| image:: /static/common/search.png
    :width: 1.5em

@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 
 # This script is used to register QGIS-Documentation translatable resources with Transifex
 # https://app.transifex.com
@@ -11,7 +12,7 @@
 # Update: Harrissou Sant-anna, December 2020
 
 TARGETBRANCH=`git branch --show-current`
-SOURCEPOFILES='locale/en/LC_MESSAGES/docs/'
+SOURCEPOFILES='locale/en/LC_MESSAGES/'
 PROJECT='qgis-documentation'
 CONFIGFILE='.tx/config'
 

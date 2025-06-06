@@ -15,13 +15,11 @@ Basic statistics for fields
 ---------------------------
 Generates basic statistics for a field of the attribute table of a
 vector layer.
-
 Numeric, date, time and string fields are supported.
-
 The statistics returned will depend on the field type.
 
-Statistics are generated as an HTML file and are available in the
-:menuselection:`Processing --> Results viewer`.
+Statistics can be generated as a table or an HTML file
+and are available in the :menuselection:`Processing --> Results viewer`.
 
 **Default menu**: :menuselection:`Vector --> Analysis Tools`
 
@@ -47,11 +45,24 @@ Parameters
    * - **Statistics**
 
        Optional
+     - ``OUTPUT``
+     - [vector: table]
+
+       Default: ``[Create temporary layer]``
+     - Specify the output table for the generated statistics. :ref:`One of <output_parameter_widget>`:
+
+       .. include:: ../algs_include.rst
+          :start-after: **layer_output_types**
+          :end-before: **end_layer_output_types**
+
+   * - **Statistics report**
+
+       Optional
      - ``OUTPUT_HTML_FILE``
      - [html]
 
        Default: ``[Save to temporary file]``
-     - Specification of the file for the calculated statistics. One of:
+     - Specification of the file for the calculated statistics. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types_skip**
@@ -70,24 +81,28 @@ Outputs
      - Type
      - Description
    * - **Statistics**
+     - ``OUTPUT``
+     - [vector: table]
+     - Table containing the calculated statistics
+   * - **Statistics report**
      - ``OUTPUT_HTML_FILE``
      - [html]
      - HTML file with the calculated statistics
    * - **Count**
      - ``COUNT``
-     - [number]
+     - [numeric: integer]
      -
    * - **Number of unique values**
      - ``UNIQUE``
-     - [number]
+     - [numeric: integer]
      -
    * - **Number of empty (null) values**
      - ``EMPTY``
-     - [number]
+     - [numeric: integer]
      -
    * - **Number of non-empty values**
      - ``FILLED``
-     - [number]
+     - [numeric: integer]
      -
    * - **Minimum value**
      - ``MIN``
@@ -99,39 +114,39 @@ Outputs
      -
    * - **Minimum length**
      - ``MIN_LENGTH``
-     - [number]
+     - [numeric: integer]
      -
    * - **Maximum length**
      - ``MAX_LENGTH``
-     - [number]
+     - [numeric: integer]
      -
    * - **Mean length**
      - ``MEAN_LENGTH``
-     - [number]
+     - [numeric: double]
      -
    * - **Coefficient of Variation**
      - ``CV``
-     - [number]
+     - [numeric: double]
      -
    * - **Sum**
      - ``SUM``
-     - [number]
+     - [numeric: double]
      -
    * - **Mean value**
      - ``MEAN``
-     - [number]
+     - [numeric: double]
      -
    * - **Standard deviation**
      - ``STD_DEV``
-     - [number]
+     - [numeric: double]
      -
    * - **Range**
      - ``RANGE``
-     - [number]
+     - [numeric: double]
      -
    * - **Median**
      - ``MEDIAN``
-     - [number]
+     - [numeric: double]
      -
    * - **Minority (rarest occurring value)**
      - ``MINORITY``
@@ -143,15 +158,15 @@ Outputs
      -
    * - **First quartile**
      - ``FIRSTQUARTILE``
-     - [number]
+     - [numeric: double]
      -
    * - **Third quartile**
      - ``THIRDQUARTILE``
-     - [number]
+     - [numeric: double]
      -
    * - **Interquartile Range (IQR)**
      - ``IQR``
-     - [number]
+     - [numeric: double]
      -
 
 Python code
@@ -202,7 +217,7 @@ Parameters
      - [vector: line]
 
        Default: ``[Create temporary layer]``
-     - Specification of the output (line) layer. One of:
+     - Specification of the output (line) layer. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -226,29 +241,27 @@ Outputs
        results from climb calculations.
    * - **Total climb**
      - ``TOTALCLIMB``
-     - [number]
+     - [numeric: double]
      - The sum of the climb for all the line geometries
        in the input layer
    * - **Total descent**
      - ``TOTALDESCENT``
-     - [number]
+     - [numeric: double]
      - The sum of the descent for all the line geometries
        in the input layer
    * - **Minimum elevation**
      - ``MINELEVATION``
-     - [number]
-     - The minimum elevation for the geometries in the
-       layer
+     - [numeric: double]
+     - The minimum elevation for the geometries in the layer
    * - **Maximum elevation**
      - ``MAXELEVATION``
-     - [number]
-     - The maximum elevation for the geometries in the
-       layer
+     - [numeric: double]
+     - The maximum elevation for the geometries in the layer
 
 Python code
 ...........
 
-**Algorithm ID**: ``qgis:climbalongline``
+**Algorithm ID**: ``native:climbalongline``
 
 .. include:: ../algs_include.rst
   :start-after: **algorithm_code_section**
@@ -333,7 +346,7 @@ Parameters
      - [vector: polygon]
 
        Default: ``[Create temporary layer]``
-     - Specification of the output layer. One of:
+     - Specification of the output layer. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types_append**
@@ -399,13 +412,13 @@ Basic parameters
      - Layer to analyze
    * - **Minimum cluster size**
      - ``MIN_SIZE``
-     - [number]
+     - [numeric: integer]
 
        Default: 5
      - Minimum number of features to generate a cluster
    * - **Maximum distance between clustered points**
      - ``EPS``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      - Distance beyond which two features can not belong
@@ -415,7 +428,7 @@ Basic parameters
      - [vector: point]
 
        Default: ``[Create temporary layer]``
-     - Specify the vector layer for the result of the clustering. One of:
+     - Specify the vector layer for the result of the clustering. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -434,8 +447,6 @@ Advanced parameters
      - Type
      - Description
    * - **Treat border points as noise (DBSCAN\*)**
-
-       Optional
      - ``DBSCAN*``
      - [boolean]
 
@@ -476,7 +487,7 @@ Outputs
        field setting the cluster they belong to
    * - **Number of clusters**
      - ``NUM_CLUSTERS``
-     - [number]
+     - [numeric: integer]
      - The number of clusters discovered
 
 Python code
@@ -552,7 +563,7 @@ Parameters
          the distances to its target points.
    * - **Use only the nearest (k) target points**
      - ``NEAREST_POINTS``
-     - [number]
+     - [numeric: integer]
 
        Default: 0
      - You can choose to calculate the distance to all the
@@ -564,7 +575,7 @@ Parameters
      - [vector: point]
 
        Default: ``[Create temporary layer]``
-     - Specification of the output vector layer. One of:
+     - Specification of the output vector layer. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -631,11 +642,11 @@ Parameters
      - Description
    * - **Source points layer**
      - ``INPUT``
-     - [vector: any]
+     - [vector: geometry]
      - Vector layer for which the nearest feature is searched
    * - **Destination hubs layer**
      - ``HUBS``
-     - [vector: any]
+     - [vector: geometry]
      - Vector layer containing the features to search for
    * - **Hub layer name attribute**
      - ``FIELD``
@@ -662,7 +673,7 @@ Parameters
 
        Default: ``[Create temporary layer]``
      - Specify the output line vector layer connecting the matching points.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -754,7 +765,7 @@ Parameters
 
        Default: ``[Create temporary layer]``
      - Specify the output point vector layer with the nearest hub.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -810,6 +821,8 @@ rendering of the lines.
 Additionally, the distance between vertices can be specified.
 A smaller distance results in a denser, more accurate line.
 
+.. warning::
+ This algorithm drops existing primary keys or FID values and regenerates them in output layers.
 
 .. figure:: img/join_lines.png
   :align: center
@@ -833,7 +846,7 @@ Basic parameters
      - Description
    * - **Hub layer**
      - ``HUBS``
-     - [vector: any]
+     - [vector: geometry]
      - Input layer
    * - **Hub ID field**
      - ``HUB_FIELD``
@@ -848,7 +861,7 @@ Basic parameters
        If no field(s) are chosen all fields are taken.
    * - **Spoke layer**
      - ``SPOKES``
-     - [vector: any]
+     - [vector: geometry]
      - Additional spoke point layer
    * - **Spoke ID field**
      - ``SPOKE_FIELD``
@@ -873,7 +886,7 @@ Basic parameters
      - [vector: line]
 
        Default: ``[Create temporary layer]``
-     - Specify the output hub line vector layer. One of:
+     - Specify the output hub line vector layer. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -893,7 +906,7 @@ Advanced parameters
      - Description
    * - **Distance between vertices (geodesic lines only)**
      - ``GEODESIC_DISTANCE``
-     - [number]
+     - [numeric: double]
 
        Default: 1000.0 (kilometers)
      - Distance between consecutive vertices (in kilometers).
@@ -967,21 +980,21 @@ Parameters
      - Description
    * - **Input layer**
      - ``INPUT``
-     - [vector: any]
+     - [vector: geometry]
      - Layer to analyze
    * - **Number of clusters**
      - ``CLUSTERS``
-     - [number]
+     - [numeric: integer]
 
        Default: 5
      - Number of clusters to create with the features
    * - **Clusters**
      - ``OUTPUT``
-     - [vector: any]
+     - [vector: same as input]
 
        Default:``[Create temporary layer]``
-     - Specify the output vector layer for generated the clusters.
-       One of:
+     - Specify the output vector layer for the generated clusters.
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -1026,7 +1039,7 @@ Outputs
      - Description
    * - **Clusters**
      - ``OUTPUT``
-     - [vector: any]
+     - [vector: same as input]
      - Vector layer containing the original features with
        fields specifying the cluster they belong to and their number in it
 
@@ -1044,8 +1057,7 @@ Python code
 
 List unique values
 ------------------
-Lists unique values of an attribute table field and counts their
-number.
+Lists unique values of an attribute table field and counts their number.
 
 **Default menu**: :menuselection:`Vector --> Analysis Tools`
 
@@ -1066,16 +1078,16 @@ Parameters
      - Layer to analyze
    * - **Target field(s)**
      - ``FIELDS``
-     - [tablefield: any]
-     - Field to analyze
+     - [tablefield: any] [list]
+     - Field(s) to analyze
    * - **Unique values**
 
        Optional
      - ``OUTPUT``
-     - [table]
+     - [vector: table]
 
        Default:``[Create temporary layer]``
-     - Specify the summary table layer with unique values. One of:
+     - Specify the summary table layer with unique values. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types_skip**
@@ -1089,7 +1101,7 @@ Parameters
 
        Default:``[Save to temporary file]``
      - HTML report of unique values in the
-       :menuselection:`Processing --> Results viewer`. One of:
+       :menuselection:`Processing --> Results viewer`. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types_skip**
@@ -1108,7 +1120,7 @@ Outputs
      - Description
    * - **Unique values**
      - ``OUTPUT``
-     - [table]
+     - [vector: table]
      - Summary table layer with unique values
    * - **HTML report**
      - ``OUTPUT_HTML_FILE``
@@ -1117,7 +1129,7 @@ Outputs
        :menuselection:`Processing --> Results viewer`
    * - **Total unique values**
      - ``TOTAL_VALUES``
-     - [number]
+     - [numeric: integer]
      - The number of unique values in the input field
    * - **Unique values concatenated**
      - ``UNIQUE_VALUES``
@@ -1166,7 +1178,7 @@ Parameters
      - Description
    * - **Input layer**
      - ``INPUT``
-     - [vector: any]
+     - [vector: geometry]
      - Input vector layer
    * - **Weight field**
 
@@ -1176,7 +1188,7 @@ Parameters
      - Field to use if you want to perform a weighted mean
    * - **Unique ID field**
      - ``UID``
-     - [tablefield: numeric]
+     - [tablefield: any]
      - Unique field on which the calculation of the mean will
        be made
    * - **Mean coordinates**
@@ -1184,7 +1196,7 @@ Parameters
      - [vector: point]
 
        Default:``[Create temporary layer]``
-     - Specify the (point vector) layer for the result. One of:
+     - Specify the (point vector) layer for the result. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -1267,7 +1279,7 @@ Parameters
 
        Default:``[Save to temporary file]``
      - Specification of the HTML file for the computed statistics.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types_skip**
@@ -1290,23 +1302,23 @@ Outputs
      - HTML file with the computed statistics
    * - **Observed mean distance**
      - ``OBSERVED_MD``
-     - [number]
+     - [numeric: double]
      - Observed mean distance
    * - **Expected mean distance**
      - ``EXPECTED_MD``
-     - [number]
+     - [numeric: double]
      - Expected mean distance
    * - **Nearest neighbour index**
      - ``NN_INDEX``
-     - [number]
+     - [numeric: integer]
      - Nearest neighbour index
    * - **Number of points**
      - ``POINT_COUNT``
-     - [number]
+     - [numeric: integer]
      - Number of points
    * - **Z-Score**
      - ``Z_SCORE``
-     - [number]
+     - [numeric: double]
      - Z-Score
 
 Python code
@@ -1347,18 +1359,18 @@ Basic parameters
      - Description
    * - **Input layer**
      - ``INPUT``
-     - [vector: any]
+     - [vector: polygon]
      - The input layer.
-   * - **Overlap layers**
+   * - **Overlay layers**
      - ``LAYERS``
-     - [vector: any] [list]
+     - [vector: polygon] [list]
      - The overlay layers.
    * - **Overlap**
      - ``OUTPUT``
      - [same as input]
 
        Default: ``[Create temporary layer]``
-     - Specify the output vector layer. One of:
+     - Specify the output vector layer. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -1380,7 +1392,7 @@ Advanced parameters
 
        Optional
      - ``GRID_SIZE``
-     - [number]
+     - [numeric: double]
 
        Default: Not set
      - If provided, the input geometries are snapped to a grid of the given size,
@@ -1447,11 +1459,11 @@ Parameters
      - Description
    * - **Source layer**
      - ``SOURCE``
-     - [vector: any]
+     - [vector: geometry]
      - Origin layer for which to search for nearest neighbors
    * - **Destination layer**
      - ``DESTINATION``
-     - [vector: any]
+     - [vector: geometry]
      - Target Layer in which to search for nearest neighbors
    * - **Method**
      - ``METHOD``
@@ -1466,7 +1478,7 @@ Parameters
 
    * - **Maximum number of neighbors**
      - ``NEIGHBORS``
-     - [number]
+     - [numeric: integer]
 
        Default: 1
      - Maximum number of neighbors to look for
@@ -1474,7 +1486,7 @@ Parameters
 
        Optional
      - ``DISTANCE``
-     - [number]
+     - [numeric: double]
      - Only destination features which are closer than this distance
        will be considered.
    * - **Shortest lines**
@@ -1482,7 +1494,7 @@ Parameters
      - [vector: line]
 
        Default: ``[Create temporary layer]``
-     - Specify the output vector layer. One of:
+     - Specify the output vector layer. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -1551,20 +1563,20 @@ Basic parameters
      - Field containing the temporal information
    * - **Minimum cluster size**
      - ``MIN_SIZE``
-     - [number]
+     - [numeric: integer]
 
        Default: 5
      - Minimum number of features to generate a cluster
    * - **Maximum distance between clustered points**
      - ``EPS``
-     - [number]
+     - [numeric: double]
 
        Default: 1.0
      - Distance beyond which two features can not belong
        to the same cluster (eps)
    * - **Maximum time duration between clustered points**
      - ``EPS2``
-     - [number]
+     - [numeric: double]
 
        Default: 0.0 (days)
      - Time duration beyond which two features can not belong
@@ -1576,7 +1588,7 @@ Basic parameters
      - [vector: point]
 
        Default: ``[Create temporary layer]``
-     - Specify the vector layer for the result of the clustering. One of:
+     - Specify the vector layer for the result of the clustering. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -1595,8 +1607,6 @@ Advanced parameters
      - Type
      - Description
    * - **Treat border points as noise (DBSCAN\*)**
-
-       Optional
      - ``DBSCAN*``
      - [boolean]
 
@@ -1637,7 +1647,7 @@ Outputs
        field setting the cluster they belong to
    * - **Number of clusters**
      - ``NUM_CLUSTERS``
-     - [number]
+     - [numeric: integer]
      - The number of clusters discovered
 
 Python code
@@ -1680,14 +1690,14 @@ Parameters
      - If empty only the count will be calculated
    * - **Field(s) with categories**
      - ``CATEGORIES_FIELD_NAME``
-     - [vector: any] [list]
+     - [tablefield: any] [list]
      - The fields that (combined) define the categories
    * - **Statistics by category**
      - ``OUTPUT``
-     - [table]
+     - [vector: table]
 
        Default: ``[Create temporary layer]``
-     - Specify the output table for the generated statistics. One of:
+     - Specify the output table for the generated statistics. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -1706,7 +1716,7 @@ Outputs
      - Description
    * - **Statistics by category**
      - ``OUTPUT``
-     - [table]
+     - [vector: table]
      - Table containing the statistics
 
 Depending on the type of the field being analyzed,
@@ -1866,7 +1876,7 @@ Parameters
      - [vector: polygon]
 
        Default: ``[Create temporary layer]``
-     - Specify the output polygon layer with generated statistics. One of:
+     - Specify the output polygon layer with generated statistics. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**

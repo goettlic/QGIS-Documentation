@@ -90,7 +90,7 @@ Manage Layers and overview
 Icon                            Substitution                        Icon                            Substitution
 ==============================  ==================================  ==============================  ==================================
 |dataSourceManager|             ``|dataSourceManager|``             \                               \
-|addOgrLayer|                   ``|addOgrLayer|``
+|addOgrLayer|                   ``|addOgrLayer|``                   |addSensorThingsLayer|          ``|addSensorThingsLayer|``
 |addRasterLayer|                ``|addRasterLayer|``                |addMssqlLayer|                 ``|addMssqlLayer|``
 |addDelimitedTextLayer|         ``|addDelimitedTextLayer|``         |addSpatiaLiteLayer|            ``|addSpatiaLiteLayer|``
 |addPostgisLayer|               ``|addPostgisLayer|``               |addOracleLayer|                ``|addOracleLayer|``
@@ -283,11 +283,11 @@ Icon                     Substitution                 Icon                     S
 |labelingRuleBased|      ``|labelingRuleBased|``      |labelingObstacle|       ``|labelingObstacle|``
 |piechart|               ``|piechart|``               |diagramNone|            ``|diagramNone|``
 |text|                   ``|text|``                   |histogram|              ``|histogram|``
-|stackedBar|             ``|stackedBar|``
+|stackedBar|             ``|stackedBar|``             |stackedDiagram|         ``|stackedDiagram|``
 |createAnnotationLayer|  ``|createAnnotationLayer|``  |annotationLayer|        ``|annotationLayer|``
-|textAnnotation|         ``|textAnnotation|``         |svgAnnotation|          ``|svgAnnotation|``
 |formAnnotation|         ``|formAnnotation|``         |htmlAnnotation|         ``|htmlAnnotation|``
 |actionText|             ``|actionText|``             |textAlongLine|          ``|textAlongLine|``
+|addImage|               ``|addImage|``               |textInsideRect|         ``|textInsideRect|``
 |labelbackground|        ``|labelbackground|``        |labelbuffer|            ``|labelbuffer|``
 |labelformatting|        ``|labelformatting|``        |labelplacement|         ``|labelplacement|``
 |labelshadow|            ``|labelshadow|``            |render|                 ``|render|``
@@ -298,6 +298,7 @@ Icon                     Substitution                 Icon                     S
 |moveLabel|              ``|moveLabel|``              |rotateLabel|            ``|rotateLabel|``
 |showPinnedLabels|       ``|showPinnedLabels|``       |showUnplacedLabel|      ``|showUnplacedLabel|``
 |changeLabelProperties|  ``|changeLabelProperties|``  |autoPlacementSettings|  ``|autoPlacementSettings|``
+|labelingRules|          ``|labelingRules|``
 =======================  ===========================  =======================  ===========================
 
 Decorations
@@ -500,7 +501,7 @@ Icon                            Substitution                        Icon        
 ==============================  ==================================  ==============================  ==================================
 |processingAlgorithm|           ``|processingAlgorithm|``           |processingModel|               ``|processingModel|``
 |processingHistory|             ``|processingHistory|``             |processingResult|              ``|processingResult|``
-|menu|                          ``|menu|``
+|menu|                          ``|menu|``                          |runSelected|                   ``|runSelected|``
 |processSelected|               ``|processSelected|``               |editHelpContent|               ``|editHelpContent|``  
 |saveAsPython|                  ``|saveAsPython|``                  |modelOutput|                   ``|modelOutput|``  
 |qgsProjectFile|                ``|qgsProjectFile|``                |addToProject|                  ``|addToProject|``
@@ -658,6 +659,8 @@ Icon                            Substitution                        Icon        
    :width: 1.5em
 .. |addRing| image:: /static/common/mActionAddRing.png
    :width: 2em
+.. |addSensorThingsLayer| image:: /static/common/mActionAddSensorThingsLayer.png
+   :width: 1.5em
 .. |addSpatiaLiteLayer| image:: /static/common/mActionAddSpatiaLiteLayer.png
    :width: 1.5em
 .. |addTable| image:: /static/common/mActionAddTable.png
@@ -1131,6 +1134,8 @@ Icon                            Substitution                        Icon        
    :width: 1.5em
 .. |labelingRuleBased| image:: /static/common/labelingRuleBased.png
    :width: 1.5em
+.. |labelingRules| image:: /static/common/mIconLabelingRules.png
+   :width: 1.5em
 .. |labelingSingle| image:: /static/common/labelingSingle.png
    :width: 1.5em
 .. |labelmask| image:: /static/common/labelmask.png
@@ -1457,6 +1462,8 @@ Icon                            Substitution                        Icon        
    :width: 1.5em
 .. |runConsole| image:: /static/common/iconRunConsole.png
    :width: 1.5em
+.. |runSelected| image:: /static/common/mActionRunSelected.png
+   :width: 1.5em
 .. |saveAsPDF| image:: /static/common/mActionSaveAsPDF.png
    :width: 1.5em
 .. |saveAsPython| image:: /static/common/mActionSaveAsPython.png
@@ -1588,6 +1595,8 @@ Icon                            Substitution                        Icon        
    :width: 1.5em
 .. |stackedBar| image:: /static/common/stacked-bar.png
    :width: 1.5em
+.. |stackedDiagram| image:: /static/common/stacked-diagram.png
+   :width: 1.5em
 .. |start| image:: /static/common/mActionStart.png
    :width: 1.5em
 .. |stopwatch| image:: /static/common/mIconStopwatch.png
@@ -1605,8 +1614,6 @@ Icon                            Substitution                        Icon        
 .. |sumLengthLines| image:: /static/common/mAlgorithmSumLengthLines.png
    :width: 1.5em
 .. |sumPoints| image:: /static/common/mAlgorithmSumPoints.png
-   :width: 1.5em
-.. |svgAnnotation| image:: /static/common/mActionSvgAnnotation.png
    :width: 1.5em
 .. |symbology| image:: /static/common/symbology.png
    :width: 2em
@@ -1638,7 +1645,7 @@ Icon                            Substitution                        Icon        
    :width: 1.5em
 .. |textAlongLine| image:: /static/common/mActionTextAlongLine.png
    :width: 1.5em
-.. |textAnnotation| image:: /static/common/mActionTextAnnotation.png
+.. |textInsideRect| image:: /static/common/mActionTextInsideRect.png
    :width: 1.5em
 .. |tiledSceneLayer| image:: /static/common/mIconTiledSceneLayer.png
    :width: 1.5em

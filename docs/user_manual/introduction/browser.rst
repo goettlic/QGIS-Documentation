@@ -224,16 +224,29 @@ each level of the dataset tree.
 |               +--------------------------------------------+--------------+--------------+------------+------------+---------------+------------+
 |               | :guilabel:`Create Database…`               | |checkbox|   | |checkbox|   |            |            |               |            |
 |               +--------------------------------------------+--------------+--------------+------------+------------+---------------+------------+
+|               | :guilabel:`Create Database and Layer…`     | |checkbox|   |              |            |            |               |            |
+|               +--------------------------------------------+--------------+--------------+------------+------------+---------------+------------+
 |               | :guilabel:`Save Connections…` details      |              |              | |checkbox| | |checkbox| | |checkbox|    |            |
 |               | to a file                                  |              |              |            |            |               |            |
 |               +--------------------------------------------+--------------+--------------+------------+------------+---------------+------------+
 |               | :guilabel:`Load Connections…`              |              |              | |checkbox| | |checkbox| | |checkbox|    |            |
 +---------------+--------------------------------------------+--------------+--------------+------------+------------+---------------+------------+
-| Connection    | :guilabel:`Refresh` a connection           |              |              | |checkbox| | |checkbox| | |checkbox|    |            |
+| Connection    | :guilabel:`Refresh` a connection           |              |              | |checkbox| | |checkbox| | |checkbox|    | |checkbox| |
 | / Database    +--------------------------------------------+--------------+--------------+------------+------------+---------------+------------+
-|               | :guilabel:`Edit Connection…` settings      |              |              | |checkbox| | |checkbox| | |checkbox|    |            |
+|               | :guilabel:`Edit Connection…` settings      |              |              | |checkbox| | |checkbox| | |checkbox|    | |checkbox| |
 |               +--------------------------------------------+--------------+--------------+------------+------------+---------------+------------+
-|               | :guilabel:`Remove Connection`              | |checkbox|   | |checkbox|   | |checkbox| | |checkbox| | |checkbox|    |            |
+|               | :guilabel:`Duplicate Connection`           |              |              | |checkbox| | |checkbox| | |checkbox|    | |checkbox| |
+|               +--------------------------------------------+--------------+--------------+------------+------------+---------------+------------+
+|               | :guilabel:`Remove Connection…`             | |checkbox|   | |checkbox|   | |checkbox| | |checkbox| | |checkbox|    | |checkbox| |
+|               +--------------------------------------------+--------------+--------------+------------+------------+---------------+------------+
+|               | :menuselection:`New Field Domain -->       |              |              |            |            |               |            |
+|               | New Range Domain`                          | |checkbox|   |              |            |            |               |            |
+|               +--------------------------------------------+--------------+--------------+------------+------------+---------------+------------+
+|               | :menuselection:`New Field Domain -->       |              |              |            |            |               |            |
+|               | New Coded Values Domain`                   | |checkbox|   |              |            |            |               |            |
+|               +--------------------------------------------+--------------+--------------+------------+------------+---------------+------------+
+|               | :menuselection:`New Field Domain -->       |              |              |            |            |               |            |
+|               | New Glob Domain`                           | |checkbox|   |              |            |            |               |            |
 |               +--------------------------------------------+--------------+--------------+------------+------------+---------------+------------+
 |               | :guilabel:`Delete <database_name>`         | |checkbox|   | |checkbox|   |            |            |               |            |
 |               +--------------------------------------------+--------------+--------------+------------+------------+---------------+------------+
@@ -290,7 +303,11 @@ each level of the dataset tree.
 +---------------+--------------------------------------------+--------------+--------------+------------+------------+---------------+------------+
 | Fields        | :guilabel:`Add New Field…`                 | |checkbox|   | |checkbox|   | |checkbox| | |checkbox| |               |            |
 +---------------+--------------------------------------------+--------------+--------------+------------+------------+---------------+------------+
-| Field         | :guilabel:`Set Alias…`                     | |checkbox|   |              |            |            |               |            |
+| Field         | :guilabel:`Set Field Domain`               | |checkbox|   |              |            |            |               |            |
++               +--------------------------------------------+--------------+--------------+------------+------------+---------------+------------+
+|               | :guilabel:`Rename Field`                   | |checkbox|   |              |            |            |               |            |
++               +--------------------------------------------+--------------+--------------+------------+------------+---------------+------------+
+|               | :guilabel:`Set Alias…`                     | |checkbox|   |              |            |            |               |            |
 |               +--------------------------------------------+--------------+--------------+------------+------------+---------------+------------+
 |               | :guilabel:`Set Comment…`                   | |checkbox|   |              | |checkbox| |            |               |            |
 |               +--------------------------------------------+--------------+--------------+------------+------------+---------------+------------+
@@ -298,49 +315,57 @@ each level of the dataset tree.
 +---------------+--------------------------------------------+--------------+--------------+------------+------------+---------------+------------+
 
 
-.. [1] The different entries may also be available for some GDAL supported `vector file formats <https://gdal.org/drivers/vector/index.html>`_
+.. [1] The different entries may also be available for some GDAL supported
+ `vector file formats <https://gdal.org/en/latest/drivers/vector/index.html>`_
  such as ESRI File Geodatabase, FlatGeobuf, GeoParquet, NetCDF, ... when compatible.
 
+.. note::
+
+  When loading vector layers into QGIS, fields with |sourceFields| :guilabel:`Field Domains`
+  (such as those defined in a GeoPackage or ESRI File Geodatabase) are automatically
+  detected. These domains are database-level constraints, meaning they are enforced
+  by the database itself and apply across different applications, not just QGIS.
 
 Tiles and Web Services
 ......................
 
-+---------------+----------------------------------------------+--------------------------------------------------------------------------------------------------------------+
-| Level         | Context menu                                 |                                               Type of services                                               |
-|               |                                              +------------+-------------------+------------+------------+----------------+-------------+--------------------+
-|               |                                              | |wms|      | |vectorTileLayer| | |xyz|      | |wcs|      | |wfs|          | |afs|       | |tiledSceneLayer|  |
-|               |                                              | WMS / WMTS | Vector Tiles      | XYZ Tiles  | WCS        | WFS / OGC      | ArcGIS REST | Scene              |
-|               |                                              |            |                   |            |            | API - Features | Servers     |                    |
-+===============+==============================================+============+===================+============+============+================+=============+====================+
-| Top menu      | Create a :guilabel:`New Connection…`         | |checkbox| |                   | |checkbox| | |checkbox| | |checkbox|     | |checkbox|  | |checkbox|         |
-|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+
-|               | Create a :guilabel:`New Generic Connection…` |            | |checkbox|        |            |            |                |             |                    |
-|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+
-|               | Create a :guilabel:`New ArcGIS Vector Tile   |            | |checkbox|        |            |            |                |             |                    |
-|               | Service Connection…`                         |            |                   |            |            |                |             |                    |
-|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+
-|               | :guilabel:`Save Connections…` details        | |checkbox| | |checkbox|        | |checkbox| | |checkbox| | |checkbox|     | |checkbox|  | |checkbox|         |
-|               | to a file                                    |            |                   |            |            |                |             |                    |
-|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+
-|               | :guilabel:`Load Connections…`                | |checkbox| | |checkbox|        | |checkbox| | |checkbox| | |checkbox|     | |checkbox|  | |checkbox|         |
-+---------------+----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+
-| Connection    | :guilabel:`Refresh` connection               | |checkbox| |                   | |checkbox| | |checkbox| | |checkbox|     | |checkbox|  |                    |
-|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+
-|               | :guilabel:`Edit…` connection settings        | |checkbox| | |checkbox|        | |checkbox| | |checkbox| | |checkbox|     | |checkbox|  | |checkbox|         |
-|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+
-|               | :guilabel:`Delete` connection                | |checkbox| | |checkbox|        | |checkbox| | |checkbox| | |checkbox|     | |checkbox|  | |checkbox|         |
-|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+
-|               | :guilabel:`View Service Info` in Web browser |            |                   |            |            |                | |checkbox|  |                    |
-+---------------+----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+
-| Table / Layer | :menuselection:`Export Layer --> To File...` | |checkbox| |                   | |checkbox| | |checkbox| | |checkbox|     | |checkbox|  |                    |
-|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+
-|               | :guilabel:`Add layer to Project`             | |checkbox| | |checkbox|        | |checkbox| | |checkbox| | |checkbox|     | |checkbox|  | |checkbox|         |
-|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+
-|               | Open :guilabel:`Layer properties…` dialog    | |checkbox| | |checkbox|        | |checkbox| | |checkbox| | |checkbox|     | |checkbox|  | |checkbox|         |
-|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+
-|               | :guilabel:`View Service Info` in Web browser |            |                   |            |            |                | |checkbox|  |                    |
-+---------------+----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+
-
++---------------+----------------------------------------------+--------------------------------------------------------------------------------------------------------------+---------------------+-------------------+
+| Level         | Context menu                                 |                                               Type of services                                                                                         |
+|               |                                              +------------+-------------------+------------+------------+----------------+-------------+--------------------+---------------------+-------------------+
+|               |                                              | |wms|      | |vectorTileLayer| | |xyz|      | |wcs|      | |wfs|          | |afs|       | |tiledSceneLayer|  | |cloud|             | |sensor|          |
+|               |                                              | WMS / WMTS | Vector Tiles      | XYZ Tiles  | WCS        | WFS / OGC      | ArcGIS REST | Scene              | Cloud               | SensorThings      |
+|               |                                              |            |                   |            |            | API - Features | Servers     |                    |                     |                   |
++===============+==============================================+============+===================+============+============+================+=============+====================+=====================+===================+
+| Top menu      | Create a :guilabel:`New Connection…`         | |checkbox| |                   | |checkbox| | |checkbox| | |checkbox|     | |checkbox|  | |checkbox|         | |checkbox|          | |checkbox|        |
+|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+---------------------+-------------------+
+|               | Create a :guilabel:`New Generic Connection…` |            | |checkbox|        |            |            |                |             |                    |                     |                   |
+|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+---------------------+-------------------+
+|               | Create a :guilabel:`New ArcGIS Vector Tile   |            | |checkbox|        |            |            |                |             |                    |                     |                   |
+|               | Service Connection…`                         |            |                   |            |            |                |             |                    |                     |                   |
+|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+---------------------+-------------------+
+|               | :guilabel:`Save Connections…` details        | |checkbox| | |checkbox|        | |checkbox| | |checkbox| | |checkbox|     | |checkbox|  | |checkbox|         | |checkbox|          | |checkbox|        |
+|               | to a file                                    |            |                   |            |            |                |             |                    |                     |                   |
+|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+---------------------+-------------------+
+|               | :guilabel:`Load Connections…`                | |checkbox| | |checkbox|        | |checkbox| | |checkbox| | |checkbox|     | |checkbox|  | |checkbox|         | |checkbox|          | |checkbox|        |
++---------------+----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+---------------------+-------------------+
+| Connection    | :guilabel:`Refresh` connection               | |checkbox| |                   | |checkbox| | |checkbox| | |checkbox|     | |checkbox|  |                    |                     |                   |
+|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+---------------------+-------------------+
+|               | :guilabel:`Edit…` connection settings        | |checkbox| | |checkbox|        | |checkbox| | |checkbox| | |checkbox|     | |checkbox|  | |checkbox|         | |checkbox|          | |checkbox|        |
+|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+---------------------+-------------------+
+|               | :guilabel:`Duplicate` connection             | |checkbox| | |checkbox|        | |checkbox| | |checkbox| | |checkbox|     | |checkbox|  | |checkbox|         | |checkbox|          | |checkbox|        |
+|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+---------------------+-------------------+
+|               | :guilabel:`Delete` connection                | |checkbox| | |checkbox|        | |checkbox| | |checkbox| | |checkbox|     | |checkbox|  | |checkbox|         | |checkbox|          | |checkbox|        |
+|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+---------------------+-------------------+
+|               | :guilabel:`View Service Info` in Web browser |            |                   |            |            |                | |checkbox|  |                    |                     |                   |
++---------------+----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+---------------------+-------------------+
+| Table / Layer | :menuselection:`Export Layer --> To File...` | |checkbox| |                   | |checkbox| | |checkbox| | |checkbox|     | |checkbox|  |                    |                     | |checkbox|        |
+|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+---------------------+-------------------+
+|               | :guilabel:`Add layer to Project`             | |checkbox| | |checkbox|        | |checkbox| | |checkbox| | |checkbox|     | |checkbox|  | |checkbox|         |                     | |checkbox|        |
+|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+---------------------+-------------------+
+|               | Open :guilabel:`Layer properties…` dialog    | |checkbox| | |checkbox|        | |checkbox| | |checkbox| | |checkbox|     | |checkbox|  | |checkbox|         |                     | |checkbox|        |
+|               +----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+---------------------+-------------------+
+|               | :guilabel:`View Service Info` in Web browser |            |                   |            |            |                | |checkbox|  |                    |                     |                   |
++---------------+----------------------------------------------+------------+-------------------+------------+------------+----------------+-------------+--------------------+---------------------+-------------------+
 
 
 Resources
@@ -422,6 +447,8 @@ Resources
    :width: 1.5em
 .. |checkbox| image:: /static/common/checkbox.png
    :width: 1.3em
+.. |cloud| image:: /static/common/mIconCloud.png
+   :width: 1.5em
 .. |collapseTree| image:: /static/common/mActionCollapseTree.png
    :width: 1.5em
 .. |filterMap| image:: /static/common/mActionFilterMap.png
@@ -439,6 +466,10 @@ Resources
 .. |oracle| image:: /static/common/mIconOracle.png
    :width: 1.5em
 .. |postgis| image:: /static/common/mIconPostgis.png
+   :width: 1.5em
+.. |sensor| image:: /static/common/sensor.png
+   :width: 1.5em
+.. |sourceFields| image:: /static/common/mSourceFields.png
    :width: 1.5em
 .. |spatialite| image:: /static/common/mIconSpatialite.png
    :width: 1.5em

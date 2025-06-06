@@ -16,12 +16,15 @@ algorithms.
 
      3dtiles
      cartography
+     checkgeometry
      database
      filetools
+     fixgeometry
      gps
      interpolation
      layertools
      mesh
+     metadatatools
      modelertools
      networkanalysis
      plots
@@ -33,6 +36,7 @@ algorithms.
      rasterterrainanalysis
      rastertools
      vectoranalysis
+     vectorcoverage
      vectorcreation
      vectorgeneral
      vectorgeometry

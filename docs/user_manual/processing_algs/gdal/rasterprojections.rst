@@ -15,7 +15,7 @@ Assign projection
 Applies a coordinate system to a raster dataset.
 
 This algorithm is derived from the
-`GDAL edit utility <https://gdal.org/programs/gdal_edit.html>`_.
+`GDAL edit utility <https://gdal.org/en/latest/programs/gdal_edit.html>`_.
 
 **Default menu**: :menuselection:`Raster --> Projections`
 
@@ -73,7 +73,7 @@ Extracts the projection of a raster file and writes it into a *world*
 file with extension :file:`.wld`.
 
 This algorithm is derived from the
-`GDAL srsinfo utility <https://gdal.org/programs/gdalsrsinfo.html>`_.
+`GDAL srsinfo utility <https://gdal.org/en/latest/programs/gdalsrsinfo.html>`_.
 
 **Default menu**: :menuselection:`Raster --> Projections`
 
@@ -146,7 +146,7 @@ Reprojects a raster layer into another Coordinate Reference System
 The output file resolution and the resampling method can be chosen.
 
 This algorithm is derived from the
-`GDAL warp utility <https://gdal.org/programs/gdalwarp.html>`_.
+`GDAL warp utility <https://gdal.org/en/latest/programs/gdalwarp.html>`_.
 
 **Default menu**: :menuselection:`Raster --> Projections`
 
@@ -199,9 +199,9 @@ Basic parameters
 
        Optional
      - ``NODATA``
-     - [number]
+     - [numeric: double]
 
-       Default: None
+       Default: Not set
      - Sets NoData value for output bands.
        If not provided, then NoData values will be copied from
        the source dataset.
@@ -209,9 +209,9 @@ Basic parameters
 
        Optional
      - ``TARGET_RESOLUTION``
-     - [number]
+     - [numeric: double]
 
-       Default: None
+       Default: Not set
      - Defines the output file resolution of reprojection result
    * - **Reprojected**
      - ``OUTPUT``
@@ -219,7 +219,7 @@ Basic parameters
 
        Default: ``[Save to temporary file]``
      - Specification of the output raster layer.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types**
@@ -240,7 +240,7 @@ Advanced parameters
    * - **Additional creation options**
 
        Optional
-     - ``OPTIONS``
+     - ``CREATION_OPTIONS`` (for QGIS <= 3.42, this was ``OPTIONS``)
      - [string]
 
        Default: ''
@@ -304,7 +304,7 @@ Advanced parameters
      - ``EXTRA``
      - [string]
 
-       Default: None
+       Default: Not set
      - Add extra GDAL command line options.
 
 Outputs

@@ -53,7 +53,7 @@ Parameters
      - Description
    * - **Input layer**
      - ``INPUT``
-     - [vector: any]
+     - [vector: geometry]
      - Layer containing the features to be clipped
    * - **Overlay layer**
      - ``OVERLAY``
@@ -66,7 +66,7 @@ Parameters
        Default: ``[Create temporary layer]``
      - Specify the layer to contain the features from the input layer
        that are inside the overlay (clipping) layer.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -87,8 +87,7 @@ Outputs
    * - **Clipped**
      - ``OUTPUT``
      - [same as input]
-     - Layer containing features from the input layer split by the
-       overlay layer.
+     - Layer containing features from the input layer split by the overlay layer.
 
 Python code
 ...........
@@ -146,11 +145,11 @@ Basic parameters
      - Description
    * - **Input layer**
      - ``INPUT``
-     - [vector: any]
+     - [vector: geometry]
      - Layer to extract (parts of) features from.
    * - **Overlay layer**
      - ``OVERLAY``
-     - [vector: any]
+     - [vector: geometry]
      
      - Layer containing the geometries that will be subtracted from
        the input layer geometries.
@@ -164,7 +163,7 @@ Basic parameters
        Default: ``[Create temporary layer]``
      - Specify the layer to contain the (parts of) features from the
        input layer that are not inside the overlay layer.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -186,7 +185,7 @@ Advanced parameters
 
        Optional
      - ``GRID_SIZE``
-     - [number]
+     - [numeric: double]
 
        Default: Not set
      - If provided, the input geometries are snapped to a grid of the given size,
@@ -260,11 +259,11 @@ Parameters
      - Description
    * - **Input layer**
      - ``INPUT``
-     - [vector: any]
+     - [vector: geometry]
      - Layer to extract (parts of) features from.
    * - **Overlay layers**
      - ``OVERLAYS``
-     - [vector: any] [list]
+     - [vector: geometry] [list]
      - List of layers containing the geometries that will be subtracted from
        the input layer geometries.
        They are expected to have at least as many dimensions (point: 0D,
@@ -276,7 +275,7 @@ Parameters
        Default: ``[Create temporary layer]``
      - Specify the layer to contain the (parts of) features from the
        input layer that do not overlap features of the overlay layers.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -314,11 +313,18 @@ Python code
 Extract/clip by extent
 ----------------------
 Creates a new vector layer that only contains features which fall
-within a specified extent.
-
-Any features which intersect the extent will be included.
+within a specified extent. Any features which intersect the extent will be
+included by default.
 
 .. figure:: img/extractbyextent.png
+  :align: center
+
+  Extract operation between a three-feature input layer 'a' and a dashed extent (left) - 
+  resulting features with dashed extent for reference (right)
+
+Optionally, feature geometries can also be clipped to the extent.
+
+.. figure:: img/extractbyextent_clip.png
   :align: center
 
   Extract operation between a three-feature input layer 'a' and a dashed extent (left) - 
@@ -339,7 +345,7 @@ Parameters
      - Description
    * - **Input layer**
      - ``INPUT``
-     - [vector: any]
+     - [vector: geometry]
      - Layer to extract (parts of) features from.
    * - **Extent (xmin, xmax, ymin, ymax)**
      - ``EXTENT``
@@ -355,17 +361,10 @@ Parameters
      - [boolean]
        
        Default: False
-     - If checked, output geometries will be automatically converted
-       to multi geometries to ensure uniform output types.
-       Moreover the geometries will be clipped to the extent chosen
+     - If checked, the geometries will be clipped to the extent chosen
        instead of taking the whole geometry as output.
-       
-       .. figure:: img/extractbyextent_clip.png
-          :align: center
-
-          Extract operation between a three-feature input layer 'a' and a dashed extent (left) - 
-          resulting features with dashed extent for reference (right)
-
+       Moreover, output geometries will be automatically converted
+       to multi geometries to ensure uniform output types.
    * - **Extracted**
      - ``OUTPUT``
      - [same as input]
@@ -373,7 +372,7 @@ Parameters
        Default: ``[Create temporary layer]``
      - Specify the layer to contain the features from the input layer
        that are inside the clip extent.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -398,7 +397,7 @@ Outputs
 Python code
 ...........
 
-**Algorithm ID**: ``qgis:extractbyextent``
+**Algorithm ID**: ``native:extractbyextent``
 
 .. include:: ../algs_include.rst
   :start-after: **algorithm_code_section**
@@ -428,6 +427,9 @@ overlapping features from both the input and overlay layers.
 
 **Default menu**: :menuselection:`Vector --> Geoprocessing Tools`
 
+.. warning::
+ This algorithm drops existing primary keys or FID values and regenerates them in output layers.
+
 .. seealso:: :ref:`qgismultiintersection`, :ref:`qgisclip`, :ref:`qgisdifference`
 
 Parameters
@@ -447,11 +449,11 @@ Basic parameters
      - Description
    * - **Input layer**
      - ``INPUT``
-     - [vector: any]
+     - [vector: geometry]
      - Layer to extract (parts of) features from.
    * - **Overlay layer**
      - ``OVERLAY``
-     - [vector: any]
+     - [vector: geometry]
      - Layer containing the features to check for overlap.
        Its features' geometry is expected to have at least as many
        dimensions (point: 0D, line: 1D, polygon: 2D, volume: 3D)
@@ -462,7 +464,7 @@ Basic parameters
      - ``INPUT_FIELDS``
      - [tablefield: any] [list]
 
-       Default: None
+       Default: Not set
      - Field(s) of the input layer to keep in the output.
        If no fields are chosen all fields are taken.
    * - **Overlay fields to keep (leave empty to keep all fields)**
@@ -471,7 +473,7 @@ Basic parameters
      - ``OVERLAY_FIELDS``
      - [tablefield: any] [list]
 
-       Default: None
+       Default: Not set
      - Field(s) of the overlay layer to keep in the output.
        If no fields are chosen all fields are taken.
        Duplicate field names will be appended a count suffix to avoid collision.
@@ -483,7 +485,7 @@ Basic parameters
      - Specify the layer to contain (the parts of) the features from
        the input layer that overlap one or more features from the
        overlay layer.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -512,7 +514,7 @@ Advanced parameters
 
        Optional
      - ``GRID_SIZE``
-     - [number]
+     - [numeric: double]
 
        Default: Not set
      - If provided, the input geometries are snapped to a grid of the given size,
@@ -567,6 +569,9 @@ features from both the input and overlay layers.
   feature overlay layers 'b' and 'c' (left) - overlapping areas become a new two-feature layer 
   with all layers' attributes (right)
 
+.. warning::
+ This algorithm drops existing primary keys or FID values and regenerate them in output layers.
+
 .. seealso:: :ref:`qgisintersection`, :ref:`qgisclip`, :ref:`qgisdifference`
 
 Parameters
@@ -586,11 +591,11 @@ Basic parameters
      - Description
    * - **Input layer**
      - ``INPUT``
-     - [vector: any]
+     - [vector: geometry]
      - Layer to extract (parts of) features from.
    * - **Overlay layers**
      - ``OVERLAYS``
-     - [vector: any] [list]
+     - [vector: geometry] [list]
      - Layers containing the features to check for overlap.
        The features' geometry is expected to have at least as many
        dimensions (point: 0D, line: 1D, polygon: 2D, volume: 3D)
@@ -657,6 +662,9 @@ Creates point features where the lines from the two layers intersect.
 
 **Default menu**: :menuselection:`Vector --> Analysis Tools`
 
+.. warning::
+ This algorithm drops existing primary keys or FID values and regenerate them in output layers.
+
 Parameters
 ..........
 
@@ -686,7 +694,7 @@ Basic parameters
      - ``INPUT_FIELDS``
      - [tablefield: any] [list]
        
-       Default: None
+       Default: Not set
      - Field(s) of the input layer to keep in the output.
        If no fields are chosen all fields are taken.
    * - **Intersect fields to keep (leave empty to keep all fields)**
@@ -695,7 +703,7 @@ Basic parameters
      - ``INTERSECT_FIELDS``
      - [tablefield: any] [list]
        
-       Default: None
+       Default: Not set
      - Field(s) of the intersect layer to keep in the output.
        If no fields are chosen all fields are taken.
        Duplicate field names will be appended a count suffix to avoid collision.
@@ -706,7 +714,7 @@ Basic parameters
        Default: ``[Create temporary layer]``
      - Specify the layer to contain the intersection points of the
        lines from the input and overlay layers.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -777,6 +785,9 @@ Output will contain multi geometries for split features.
 |checkbox| Allows :ref:`features in-place modification <processing_inplace_edit>`
 of line and polygon features
 
+.. warning::
+ This algorithm drops existing primary keys or FID values and regenerate them in output layers.
+
 Parameters
 ..........
 
@@ -804,7 +815,7 @@ Parameters
      - Specify the layer to contain the splitted (in case they are
        intersected by a line in the split layer) line/polygon features
        from the input layer.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -860,6 +871,9 @@ attributes and fields from both the input and overlay layers.
 
 **Default menu**: :menuselection:`Vector --> Geoprocessing Tools`
 
+.. warning::
+ This algorithm drops existing primary keys or FID values and regenerate them in output layers.
+
 .. seealso:: :ref:`qgisdifference`, :ref:`qgisclip`,
    :ref:`qgisintersection`
 
@@ -879,11 +893,11 @@ Basic parameters
      - Description
    * - **Input layer**
      - ``INPUT``
-     - [vector: any]
+     - [vector: geometry]
      - First layer to extract (parts of) features from.
    * - **Overlay layer**
      - ``OVERLAY``
-     - [vector: any]
+     - [vector: geometry]
      - Second layer to extract (parts of) features from.
        Ideally the geometry type should be the same as input layer.
    * - **Symmetrical difference**
@@ -894,7 +908,7 @@ Basic parameters
      - Specify the layer to contain (the parts of) the features from
        the input and overlay layers that do not overlap features from
        the other layer.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -923,7 +937,7 @@ Advanced parameters
 
        Optional
      - ``GRID_SIZE``
-     - [number]
+     - [numeric: double]
 
        Default: Not set
      - If provided, the input geometries are snapped to a grid of the given size,
@@ -994,6 +1008,9 @@ attribute values from both layers for overlapping features.
 
 **Default menu**: :menuselection:`Vector --> Geoprocessing Tools`
 
+.. warning::
+ This algorithm drops existing primary keys or FID values and regenerate them in output layers.
+
 .. seealso:: :ref:`qgismultiunion`, :ref:`qgisclip`, :ref:`qgisdifference`,
    :ref:`qgisintersection`
 
@@ -1013,13 +1030,13 @@ Basic parameters
      - Description
    * - **Input layer**
      - ``INPUT``
-     - [vector: any]
+     - [vector: geometry]
      - Input vector layer to split at any intersections.
    * - **Overlay layer**
 
        Optional
      - ``OVERLAY``
-     - [vector: any]
+     - [vector: geometry]
      - Layer that will be combined to the first one.
        Ideally the geometry type should be the same as input layer.
    * - **Union**
@@ -1029,7 +1046,7 @@ Basic parameters
        Default: ``[Create temporary layer]``
      - Specify the layer to contain the (split and duplicated)
        features from the input layer and the overlay layer.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**
@@ -1058,7 +1075,7 @@ Advanced parameters
 
        Optional
      - ``GRID_SIZE``
-     - [number]
+     - [numeric: double]
 
        Default: Not set
      - If provided, the input geometries are snapped to a grid of the given size,
@@ -1128,6 +1145,9 @@ attribute values from overlay layers for overlapping features.
    first run the algorithm with multiple layers then run the algorithm
    again with only the previous output.
 
+.. warning::
+ This algorithm drops existing primary keys or FID values and regenerate them in output layers.
+
 .. seealso:: :ref:`qgisunion`, :ref:`qgisclip`, :ref:`qgisdifference`,
    :ref:`qgisintersection`
 
@@ -1147,13 +1167,13 @@ Basic parameters
      - Description
    * - **Input layer**
      - ``INPUT``
-     - [vector: any]
+     - [vector: geometry]
      - Input vector layer to split at any intersections.
    * - **Overlay layers**
 
        Optional
      - ``OVERLAYS``
-     - [vector: any] [list]
+     - [vector: geometry] [list]
      - Layers that will be combined to the first one.
        Ideally the geometry type should be the same as input layer.
    * - **Union**
@@ -1163,7 +1183,7 @@ Basic parameters
        Default: ``[Create temporary layer]``
      - Specify the layer to contain the (split and duplicated)
        features from the input layer and the overlay layers.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types**

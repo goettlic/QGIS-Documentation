@@ -22,13 +22,13 @@ and often write a lot of formats:
   MapInfo and MicroStation file formats, AutoCAD DWG/DXF,
   GRASS and many more...
   Read the complete list of `supported vector formats
-  <https://gdal.org/drivers/vector/index.html>`_.
+  <https://gdal.org/en/latest/drivers/vector/index.html>`__.
 * Raster data formats include GeoTIFF, JPEG, ASCII Gridded XYZ,
   MBTiles, R or Idrisi rasters, GDAL Virtual, SRTM, Sentinel Data,
   ERDAS IMAGINE, ArcInfo Binary Grid, ArcInfo ASCII Grid, and
   many more...
   Read the complete list of `supported raster formats
-  <https://gdal.org/drivers/raster/index.html>`_.
+  <https://gdal.org/en/latest/drivers/raster/index.html>`__.
 * Database formats include PostgreSQL/PostGIS, SQLite/SpatiaLite, Oracle,
   MS SQL Server, SAP HANA, MySQL...
 * Web map and data services (WM(T)S, WFS, WCS, CSW, XYZ tiles, ArcGIS
@@ -39,7 +39,7 @@ and often write a lot of formats:
   layers.
 
 More than 80 vector and 140 raster formats are supported by
-`GDAL <https://gdal.org/>`_ and QGIS native providers.
+`GDAL <https://gdal.org/en/latest/>`_ and QGIS native providers.
 
 .. note::
 
@@ -376,7 +376,16 @@ To load a layer from a file:
    Other formats can be loaded by selecting ``All files`` (the top item
    in the pull-down menu).
 #. Press :guilabel:`Open` to load the selected file into :guilabel:`Data
-   Source Manager` dialog
+   Source Manager` dialog.
+
+   Depending on the selected layer type, additional :guilabel:`Options`
+   (encoding, geometry type, table filtering, file locking, data formatting ...)
+   are available for configuring.
+   These options are described in detail in the specific GDAL
+   `vector <https://gdal.org/en/latest/drivers/vector/>`__
+   or `raster <https://gdal.org/en/latest/drivers/raster>`__ driver documentation.
+   At the top of the options, a text with hyperlink will directly lead to the documentation
+   of the appopriate driver for the selected file format.
 
    .. _figure_vector_layer_open_options:
 
@@ -404,13 +413,6 @@ To load a layer from a file:
 
       QGIS with Shapefile of Alaska loaded
 
-.. note::
-
- For loading vector and raster files the GDAL driver offers to define open
- actions. These will be shown when a file is selected. Options are described
- in detail on https://gdal.org/drivers/vector/, https://gdal.org/drivers/raster
- and if a file is selected in QGIS, a text with hyperlink will directly
- lead to the documentation of the selected file type.
 .. note::
 
  Because some formats like MapInfo (e.g., :file:`.tab`) or Autocad (:file:`.dxf`)
@@ -448,9 +450,16 @@ Layer` tabs allow loading of layers from source types other than :guilabel:`File
   * ``HTTP/HTTPS/FTP``, with a :guilabel:`URI` and, if required,
     an :ref:`authentication <authentication_index>`.
   * Cloud storage such as ``AWS S3``, ``Google Cloud Storage``, ``Microsoft
-    Azure Blob``, ``Alibaba OSS Cloud``, ``Open Stack Swift Storage``.
+    Azure Blob``, ``Microsoft Azure Data Lake Storage``, ``Alibaba OSS Cloud``, and
+    ``Open Stack Swift Storage`` supports direct control over VSI :guilabel:`Credential Options`
+    when adding OGR vector or GDAL raster layers.
     You need to fill in the :guilabel:`Bucket or container` and the
-    :guilabel:`Object key`.
+    :guilabel:`Object key` first. After that, you can add the necessary :guilabel:`Credential Options`.
+
+    When adding OGR vector or GDAL raster layers from the cloud based protocols,
+    you can also set additional :guilabel:`Credential options` for that specific driver and bucket.
+    When credential options are found in a layer's URI, they will also be automatically set.
+    This allows different layers to use different credentials.
   * service supporting OGC ``WFS 3`` (still experimental),
     using ``GeoJSON`` or ``GEOJSON - Newline Delimited`` format or based on
     ``CouchDB`` database.
@@ -458,8 +467,10 @@ Layer` tabs allow loading of layers from source types other than :guilabel:`File
   * For all vector source types it is possible to define the :guilabel:`Encoding` or
     to use the :menuselection:`Automatic -->` setting.
 
-* The |radioButtonOn| :guilabel:`OGC API` source type allows you to access `vector <https://gdal.org/drivers/vector/oapif.html>`_
-  and `raster <https://gdal.org/drivers/raster/ogcapi.html>`_ data from servers that implement the OGC API standards.
+* The |radioButtonOn| :guilabel:`OGC API` source type allows you to access
+  `vector <https://gdal.org/en/latest/drivers/vector/oapif.html>`_
+  and `raster <https://gdal.org/en/latest/drivers/raster/ogcapi.html>`_ data
+  from servers that implement the OGC API standards.
   To use this option:
   
   #. Select |radioButtonOn| :guilabel:`OGC API` from the :guilabel:`Data Source Manager`
@@ -521,8 +532,6 @@ is designed for.
 #. Enable the |addDelimitedTextLayer| :guilabel:`Delimited Text` tab
 #. Select the delimited text file to import (e.g., :file:`qgis_sample_data/csv/elevp.csv`)
    by clicking on the :guilabel:`...` :sup:`Browse` button.
-#. In the :guilabel:`Layer name` field, provide the name to use for
-   the layer in the project (e.g. :file:`Elevation`).
 #. Configure the settings to meet your dataset and needs, as explained below.
 
 .. _figure_delimited_text:
@@ -577,8 +586,7 @@ Field type detection
 
 QGIS tries to detect the field types automatically (unless
 |checkbox|:guilabel:`Detect field types` is not checked) by examining
-the content of an optional sidecar CSVT file (see:
-`GeoCSV specification <https://giswiki.hsr.ch/GeoCSV#CSVT_file_format_specification>`_)
+the content of an optional sidecar CSVT file (see `GeoCSV specification`_)
 and by scanning the whole file to make sure that all values can actually
 be converted without errors, the fall-back field type is text.
 
@@ -829,22 +837,22 @@ Connecting to SpatiaLite database is described at :ref:`label_spatialite`.
    tree, right-clicking and choosing connect will provide you
    with the database connection dialog.
 
-Most of the connection dialogs follow a common basis that will be described
-below using the PostgreSQL database tool as an example.
-For additional settings specific to other providers, you can find
-corresponding descriptions at:
+Most of the connection dialogs follow a common structure:
 
-* :ref:`create_ms_sql_server_connection`;
-* :ref:`create_oracle_connection`;
-* :ref:`create_hana_connection`.
+* a section with credentials information to connect to the database
+* a section with options to tune which data can be requested in the database
 
-The first time you use a PostGIS data source, you must create a connection to a
-database that contains the data. Begin by clicking the appropriate button as
-exposed above, opening an :guilabel:`Add PostGIS Table(s)` dialog
-(see :numref:`figure_add_postgis_tables`).
-To access the connection manager, click on the :guilabel:`New`
-button to display the
-:guilabel:`Create a New PostGIS Connection` dialog.
+.. _create_postgresql_connection:
+
+Connecting to PostgreSQL
+........................
+
+The first time you use a PostGIS data source, you must create a connection
+to a database that contains the data.
+Press the appropriate button as exposed above, opening the :guilabel:`PostgreSQL` tab
+of the :guilabel:`Data Source Manager` dialog.
+To access the connection manager, click on the :guilabel:`New` button
+to display the :guilabel:`Create a New PostGIS Connection` dialog.
 
 .. _figure_new_postgis_connection:
 
@@ -853,37 +861,37 @@ button to display the
 
    Create a New PostGIS Connection Dialog
 
-
-The parameters required for a PostGIS connection are explained below.
-For the other database types, see their differences at
-:ref:`db_requirements`.
-
 * :guilabel:`Name`: A name for this connection. It can be the same as :guilabel:`Database`.
-* :guilabel:`Service`: Service parameter to be used alternatively to hostname/port (and
-  potentially database). This can be defined in :file:`pg_service.conf`.
+* :guilabel:`Service`: Service parameter to be used alternatively to hostname/port
+  (and potentially database). This can be defined in :file:`pg_service.conf`.
   Check the :ref:`pg-service-file` section for more details.
 * :guilabel:`Host`: Name of the database host. This must be a resolvable host name
-  such as would be used to open a TCP/IP connection or ping the host. If the
-  database is on the same computer as QGIS, simply enter *localhost* here.
-* :guilabel:`Port`: Port number the PostgreSQL database server listens on. The default
-  port for PostGIS is ``5432``.
+  such as would be used to open a TCP/IP connection or ping the host.
+  If the database is on the same computer as QGIS, simply enter *localhost* here.
+* :guilabel:`Port`: Port number the PostgreSQL database server listens on.
+  The default port for PostGIS is ``5432``.
 * :guilabel:`Database`: Name of the database.
-* :guilabel:`SSL mode`: SSL encryption setup
+* :guilabel:`SSL mode`: SSL encryption setup.
   The following options are available:
 
-  * :guilabel:`Prefer` (the default): I don't care about encryption, but I wish to pay
-    the overhead of encryption if the server supports it.
-  * :guilabel:`Require`: I want my data to be encrypted, and I accept the overhead. I trust
-    that the network will make sure I always connect to the server I want.
-  * :guilabel:`Verify CA`: I want my data encrypted, and I accept the overhead. I want to
-    be sure that I connect to a server that I trust.
-  * :guilabel:`Verify Full`: I want my data encrypted, and I accept the overhead. I want to
-    be sure that I connect to a server I trust, and that it's the one I specify.
-  * :guilabel:`Allow`: I don't care about security, but I will pay the overhead of
-    encryption if the server insists on it.
-  * :guilabel:`Disable`: I don't care about security, and I don't want to pay the overhead
-    of encryption.
+  * :guilabel:`Prefer` (the default): I don't care about encryption,
+    but I wish to pay the overhead of encryption if the server supports it.
+  * :guilabel:`Require`: I want my data to be encrypted, and I accept the overhead.
+    I trust that the network will make sure I always connect to the server I want.
+  * :guilabel:`Verify CA`: I want my data encrypted, and I accept the overhead.
+    I want to be sure that I connect to a server that I trust.
+  * :guilabel:`Verify Full`: I want my data encrypted, and I accept the overhead.
+    I want to be sure that I connect to a server I trust, and that it's the one I specify.
+  * :guilabel:`Allow`: I don't care about security,
+    but I will pay the overhead of encryption if the server insists on it.
+  * :guilabel:`Disable`: I don't care about security,
+    and I don't want to pay the overhead of encryption.
 
+* :guilabel:`Session role`: used to set the current user identifier of the current session.
+  This is useful to automatically give the ownership of a new object (table, view, function)
+  to the session_role group and thus share ownership and associated rights with all members
+  of the session_role group.
+  Read more about `session role <https://www.postgresql.org/docs/current/sql-set-role.html>`_.
 * :guilabel:`Authentication`, basic.
 
   * :guilabel:`User name`: User name used to log in to the database.
@@ -921,41 +929,33 @@ checkboxes:
 
 * |checkbox| :guilabel:`Only show layers in the layer registries`
 * |checkbox| :guilabel:`Don't resolve type of unrestricted columns (GEOMETRY)`
-* |checkbox| :guilabel:`Only look in the 'public' schema`
-* |checkbox| :guilabel:`Also list tables with no geometry`
-* |checkbox| :guilabel:`Use estimated table metadata`
+* |checkbox| :guilabel:`Also list tables with no geometry`:
+  indicates that tables without geometry should also be listed by default.
+* |checkbox| :guilabel:`Use estimated table metadata`: When initializing layers,
+  various queries may be needed to establish the characteristics of the geometries
+  stored in the database table.
+  When this option is checked, these queries examine only a sample of the rows
+  and use the table statistics, rather than the entire table.
+  This can drastically speed up operations on large datasets,
+  but may result in incorrect characterization of layers
+  (e.g. the feature count of filtered layers will not be accurately determined)
+  and may even cause strange behaviour if columns that are supposed to be unique
+  actually are not.
 * |checkbox| :guilabel:`Allow saving/loading QGIS projects in the database`
   - more details :ref:`here <saveprojecttodb>`
 * |checkbox| :guilabel:`Allow saving/loading QGIS layer metadata in the database`
   - more details :ref:`here <savemetadatatodb>`
-
-.. tip:: **Use estimated table metadata to speed up operations**
-
-   When initializing layers, various queries may be needed to establish the
-   characteristics of the geometries stored in the database table. When the
-   :guilabel:`Use estimated table metadata` option is checked, these queries
-   examine only a sample of the rows and use the table statistics, rather than
-   the entire table. This can drastically speed up operations on large
-   datasets, but may result in incorrect characterization of layers
-   (e.g. the feature count of filtered layers will not be accurately
-   determined) and may even cause strange behaviour if columns
-   that are supposed to be unique actually are not.
+* |checkbox| :guilabel:`Also list raster overview tables`
+* |checkbox| :guilabel:`Only look in the 'public' schema`
+* :guilabel:`Schema`: Allows to specify a single schema to limit a connection to.
+  When set, only tables from the matching schema will be included in the browser panel
+  and data source select for the connection.
+  This can be used to limit the database work required to populate tables
+  for a connection pointing to a large database store.
 
 Once all parameters and options are set, you can test the connection by
 clicking the :guilabel:`Test Connection` button or apply it by clicking
 the :guilabel:`OK` button.
-From :guilabel:`Add PostGIS Table(s)`, click now on :guilabel:`Connect`,
-and the dialog is filled with tables from the selected database
-(as shown in :numref:`figure_add_postgis_tables`).
-
-
-.. _db_requirements:
-
-Particular Connection requirements
-..................................
-
-Because of database type particularities, provided options are not
-the same. Database specific options are described below.
 
 .. _pg-service-file:
 
@@ -966,8 +966,8 @@ The service connection file allows PostgreSQL connection parameters to be
 associated with a single service name. That service name can then be specified
 by a client and the associated settings will be used.
 
-It's called :file:`.pg_service.conf` under \*nix systems (GNU/Linux,
-macOS etc.) and :file:`pg_service.conf` on Windows.
+It's called :file:`.pg_service.conf` under \*nix systems (GNU/Linux, macOS etc.)
+and :file:`pg_service.conf` on Windows.
 
 The service file can look like this::
 
@@ -992,10 +992,8 @@ The service file can look like this::
   You can find all the PostgreSQL parameters
   `here <https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS>`_
 
-.. note:: If you don't want to save the passwords in the service file you can
-  use the
-  `.pg_pass <https://www.postgresql.org/docs/current/libpq-pgpass.html>`_
-  option.
+.. note:: If you don't want to save the passwords in the service file you can use
+  the `.pg_pass <https://www.postgresql.org/docs/current/libpq-pgpass.html>`_ option.
 
 .. note:: **QGIS Server and service**
 
@@ -1012,8 +1010,7 @@ specifying any other environment variables).
 You can specify the location of the service file by creating a
 ``PGSERVICEFILE`` environment variable (e.g. run the
 ``export PGSERVICEFILE=/home/web/.pg_service.conf``
-command under your \*nix OS to temporarily set the ``PGSERVICEFILE``
-variable)
+command under your \*nix OS to temporarily set the ``PGSERVICEFILE`` variable).
 
 You can also make the service file available system-wide (all users) either by
 placing the :file:`.pg_service.conf` file in ``pg_config --sysconfdir`` or by
@@ -1048,8 +1045,7 @@ Connecting to Oracle Spatial
 
 The spatial features in Oracle Spatial aid users in managing geographic and
 location data in a native type within an Oracle database.
-In addition to some of the options in :ref:`vector_create_stored_connection`,
-the connection dialog proposes:
+The connection dialog proposes:
 
 * **Database**: SID or SERVICE_NAME of the Oracle instance;
 * **Port**: Port number the Oracle database server listens on. The default
@@ -1063,25 +1059,32 @@ the connection dialog proposes:
 Optionally, you can activate the following checkboxes:
 
 * |checkbox| :guilabel:`Only look in metadata table`: restricts the displayed
-  tables to those that are in the ``all_sdo_geom_metadata`` view. This can
-  speed up the initial display of spatial tables.
-* |checkbox| :guilabel:`Only look for user's tables`: when searching for spatial
-  tables, restricts the search to tables that are owned by the user.
-* |checkbox| :guilabel:`Also list tables with no geometry`: indicates that
-  tables without geometry should also be listed by default.
+  tables to those that are in the ``all_sdo_geom_metadata`` view.
+  This can speed up the initial display of spatial tables.
+* |checkbox| :guilabel:`Only look for user's tables`: when searching for spatial tables,
+  restricts the search to tables that are owned by the user.
+* |checkbox| :guilabel:`Also list tables with no geometry`:
+  indicates that tables without geometry should also be listed by default.
 * |checkbox| :guilabel:`Use estimated table statistics for the layer metadata`:
   when the layer is set up, various metadata are required for the Oracle table.
   This includes information such as the table row count, geometry type and
-  spatial extents of the data in the geometry column. If the table contains a
-  large number of rows, determining this metadata can be time-consuming. By
-  activating this option, the following fast table metadata operations are
-  done: Row count is determined from ``all_tables.num_rows``. Table extents
-  are always determined with the SDO_TUNE.EXTENTS_OF function, even if a layer
-  filter is applied. Table geometry is determined from the first 100
-  non-null geometry rows in the table.
-* |checkbox| :guilabel:`Only existing geometry types`: only lists the existing
-  geometry types and don't offer to add others.
+  spatial extents of the data in the geometry column.
+  If the table contains a large number of rows, determining this metadata can be time-consuming.
+  By activating this option, the following fast table metadata operations are done:
+  Row count is determined from ``all_tables.num_rows``.
+  Table extents are always determined with the SDO_TUNE.EXTENTS_OF function,
+  even if a layer filter is applied.
+  Table geometry is determined from the first 100 non-null geometry rows in the table.
+* |checkbox| :guilabel:`Only existing geometry types`:
+  only lists the existing geometry types and don't offer to add others.
 * |checkbox| :guilabel:`Include additional geometry attributes`.
+* |checkbox| :guilabel:`Allow saving/loading QGIS projects in the database`
+  - more details :ref:`here <saveprojecttodb>`
+* :guilabel:`Schema`: Allows to specify a single schema to limit a connection to.
+  When set, only tables from the matching schema will be included in the browser panel
+  and data source select for the connection.
+  This can be used to limit the database work required to populate tables
+  for a connection pointing to a large database store.
 
 .. _tip_ORACLE_Spatial_layers:
 
@@ -1113,7 +1116,7 @@ To create a new MS SQL Server connection, you need to provide some of the
 following information in the :guilabel:`Connection Details` dialog:
 
 * :guilabel:`Connection name`
-* :guilabel:`Provider/DNS`
+* :guilabel:`Provider/DSN`
 * :guilabel:`Host`
 * :guilabel:`Login` information. You can choose
   to |checkbox| :guilabel:`Save` your credentials.
@@ -1260,9 +1263,8 @@ PostGIS database.
 
 To load a layer from a database, you can perform the following steps:
 
-#. Open the "Add <database> table(s)" dialog
-   (see :ref:`vector_create_stored_connection`).
-#. Choose the connection from the drop-down list and click :guilabel:`Connect`.
+#. Open the corresponding tab of the database in the :guilabel:`Data Source Manager` dialog.
+#. Choose the connection name from the drop-down list and press :guilabel:`Connect`.
 #. Select or unselect |checkbox| :guilabel:`Also list tables with no geometry`.
 #. Optionally, use some |checkbox| :guilabel:`Search Options` to reduce the
    list of tables to those matching your search. You can also set this option
@@ -1297,11 +1299,9 @@ To load a layer from a database, you can perform the following steps:
   sometimes be time consuming as QGIS fetches statistics and
   properties (e.g. geometry type and field, CRS, number of features)
   for each table beforehand.
-  To avoid this, once
-  :ref:`the connection is set <vector_create_stored_connection>`,
+  To avoid this, once :ref:`the connection is set <vector_create_stored_connection>`,
   it is better to use the :ref:`Browser Panel <browser_panel>` or the
-  :ref:`DB Manager <dbmanager>` to drag and drop the database tables
-  into the map canvas.
+  :ref:`DB Manager <dbmanager>` to drag and drop the database tables into the map canvas.
 
 .. _layer_metadata_search_panel:
 
@@ -1381,7 +1381,16 @@ Services can be either a :guilabel:`New Generic Connection...` or a
 You set up a service by adding:
 
 * a :guilabel:`Name`
-* the :guilabel:`URL`: of the type ``http://example.com/{z}/{x}/{y}.pbf`` for generic
+* a :guilabel:`Style URL`: a URL to a MapBox GL JSON style configuration.
+  If provided, then that style will be applied whenever the layers
+  from the connection are added to QGIS.
+  In the case of Arcgis vector tile service connections, the URL overrides
+  the default style configuration specified in the server configuration.
+
+  You can load vector tiles directly from a :guilabel:`Style URL`.
+  The data source is automatically parsed from the style, and URLs with multiple sources are supported.
+  That makes :guilabel:`Source URL` optional.
+* the :guilabel:`Source URL`: of the type ``http://example.com/{z}/{x}/{y}.pbf`` for generic
   services and ``http://example.com/arcgis/rest/services/Layer/VectorTileServer``
   for ArcGIS based services.
   The service must provide tiles in :file:`.pbf` format.
@@ -1393,23 +1402,18 @@ You set up a service by adding:
   For Mercator projection (used by OpenStreetMap Vector Tiles) Zoom Level 0
   represents the whole world at a scale of 1:500.000.000. Zoom Level 14
   represents the scale 1:35.000.
-* a :guilabel:`Style URL`: a URL to a MapBox GL JSON style configuration.
-  If provided, then that style will be applied whenever the layers
-  from the connection are added to QGIS.
-  In the case of Arcgis vector tile service connections, the URL overrides
-  the default style configuration specified in the server configuration.
 * the :ref:`authentication <authentication_index>` configuration if necessary
 * a :guilabel:`Referer`
 
-:numref:`figure_vector_tiles_maptilerplanet` shows the dialog with the
-MapTiler planet Vector Tiles service configuration.
+:numref:`figure_vector_tiles_configuration` shows the dialog with the
+Vector Tiles service configuration.
 
-.. _figure_vector_tiles_maptilerplanet:
+.. _figure_vector_tiles_configuration:
 
-.. figure:: img/vector_tiles_maptilerplanet.png
+.. figure:: img/vector_tiles_configuration.png
    :align: center
 
-   Vector Tiles - Maptiler Planet configuration
+   Vector Tiles - Service configuration
 
 Configurations can be saved to :file:`.XML` file (:guilabel:`Save Connections`)
 through the :guilabel:`Vector Tiles` entry in :guilabel:`Data Source Manager`
@@ -1601,11 +1605,14 @@ Once a connection to an ArcGIS REST Server is set, it's possible to:
 .. index:: 3D Tiles services
 .. _3d_tiles:
 
-Using 3D tiles services
------------------------
+Using 3D tiled scene services
+------------------------------
 
-To load a 3D tiles into QGIS, use the |addTiledSceneLayer| :guilabel:`Scene` tab
-in the :guilabel:`Data Source Manager` dialog. 
+QGIS supports multiple formats of 3D tiled datasets, grouped together as "tiled
+scenes". These include Cesium 3D Tiles and Quantized Mesh tiles.
+
+To load a tiled scene dataset into QGIS, use the |addTiledSceneLayer|
+:guilabel:`Scene` tab in the :guilabel:`Data Source Manager` dialog.
 
 .. _figure_scene:
 
@@ -1614,26 +1621,26 @@ in the :guilabel:`Data Source Manager` dialog.
 
    Data Source Manager - Scene
 
-Create a :guilabel:`New Cesium 3D Tiles Connection` by clicking on 
-:guilabel:`New`. Add :guilabel:`Name` and :guilabel:`URL` or add
-local tileset file.
+Create a connection by clicking on :guilabel:`New`. You can add a
+:guilabel:`New Cesium 3D Tiles Connection` or a :guilabel:`New Quantized Mesh
+Connection`.
 
-Support for 3D tiles:
+Choose a :guilabel:`Name` and set the :guilabel:`URL` to the URL of a layer description JSON file.
 
-* Remote source - ``http://example.com/tileset.json``
-* Local files - ``file:///path/to/tiles/tileset.json``
+The URL may be remote (e.g. ``http://example.com/tileset.json``) or local (e.g.
+``file:///path/to/tiles/tileset.json``).
 
 .. _figure_tiled_scene_connection:
 
 .. figure:: img/tiled_scene_connection.png
    :align: center
 
-   Tiled Scene Connection 
+   Tiled Scene Connection
 
 You can also add the service from :guilabel:`Browser Panel`.
 
 After creating new connection you are able to :guilabel:`Add` the new layer
-to your map. 
+to your map.
 
 .. _figure_3d_tiles_layer:
 
@@ -1641,6 +1648,44 @@ to your map.
    :align: center
 
    3D Tiles Layer - Textured
+
+.. _figure_quantized_mesh_layer:
+
+.. figure:: img/quantized_mesh_layer.png
+   :align: center
+
+   Quantized Mesh layer
+
+.. index:: Cloud connections
+.. _cloud_connections:
+
+Using Cloud Connections
+-----------------------
+
+QGIS supports connections to cloud services like Alibaba Cloud OSS, Amazon S3, Google Cloud Storage,
+Microsoft Azure Blob Storage, Microsoft Azure Data Lake Storage, and OpenStack Swift Object Storage.
+You can load vector and raster data from these services into QGIS.
+Set up a new |cloud| :guilabel:`Cloud` connection in the :guilabel:`Browser` panel by right-clicking
+on the :guilabel:`Cloud` entry and selecting :guilabel:`New Connection`. You will see a drop-down list of
+available cloud services.
+Select the service you want to connect to and fill in the required fields:
+
+.. _figure_cloud_connection:
+
+.. figure:: img/cloud_connection.png
+   :align: center
+
+   Cloud Connection Dialog
+
+* :guilabel:`Name`: A name for the connection.
+* :guilabel:`Bucket or Container`: The name of the bucket or container in the cloud service.
+* :guilabel:`Object Key` (optional): The key of the object in the bucket or container.
+* :guilabel:`Credentials`: The credentials to access the cloud service.
+
+You can also choose to :guilabel:`Save Connection` to an XML file
+or :guilabel:`Load Connection` from an XML file.
+
+.. _GeoCSV specification: https://giswiki.ch/GeoCSV#CSVT_file_format_specification
 
 
 .. Substitutions definitions - AVOID EDITING PAST THIS LINE
@@ -1681,6 +1726,8 @@ to your map.
    :width: 1.5em
 .. |checkbox| image:: /static/common/checkbox.png
    :width: 1.3em
+.. |cloud| image:: /static/common/mIconCloud.png
+   :width: 1.5em
 .. |collapseTree| image:: /static/common/mActionCollapseTree.png
    :width: 1.5em
 .. |dataSourceManager| image:: /static/common/mActionDataSourceManager.png

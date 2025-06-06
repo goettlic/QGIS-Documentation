@@ -50,7 +50,7 @@ Parameters
 
        Optional
      - ``START``
-     - [number]
+     - [numeric: integer]
 
        Default: 0
      - Choose the initial number of the incremental count
@@ -58,7 +58,7 @@ Parameters
        
        Optional
      - ``MODULUS``
-     - [number]
+     - [numeric: integer]
        
        Default: 0
      - Specifying an optional modulus value will restart the count to START
@@ -102,7 +102,7 @@ Parameters
        Default: ``[Create temporary layer]``
      - Specify the output vector layer with the auto increment
        field.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types_append**
@@ -172,19 +172,27 @@ Parameters
        Default: 0
      - Type of the new field. You can choose between:
        
-       * 0 --- Integer
-       * 1 --- Float
-       * 2 --- String
+       * 0 --- Integer (32 bit)
+       * 1 --- Decimal (double)
+       * 2 --- Text (string)
+       * 3 --- Boolean
+       * 4 --- Date
+       * 5 --- Time
+       * 6 --- Date & Time
+       * 7 --- Binary Object (BLOB)
+       * 8 --- String List
+       * 9 --- Integer List
+       * 10 --- Decimal (double) List
        
    * - **Field length**
      - ``FIELD_LENGTH``
-     - [number]
+     - [numeric: integer]
        
        Default: 10
      - Length of the field
    * - **Field precision**
      - ``FIELD_PRECISION``
-     - [number]
+     - [numeric: integer]
        
        Default: 0
      - Precision of the field. Useful with Float field type.
@@ -206,7 +214,7 @@ Parameters
        
        Default: ``[Create temporary layer]``
      - Specify the output vector layer.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types_append**
@@ -283,11 +291,11 @@ Parameters
      - Name of the new field containing the indexes.
    * - **Layer with index field**
      - ``OUTPUT``
-     - [vector: any]
+     - [same as input]
        
        Default: ``[Create temporary layer]``
      - Vector layer with the numeric field containing indexes.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types_skip**
@@ -295,12 +303,12 @@ Parameters
 
    * - **Class summary**
      - ``SUMMARY_OUTPUT``
-     - [table]
+     - [vector: table]
        
        Default: ``[Skip output]``
      - Specify the table to contain the summary of the class field
        mapped to the corresponding unique value.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types_skip**
@@ -323,7 +331,7 @@ Outputs
      - Vector layer with the numeric field containing indexes.
    * - **Class summary**
      - ``SUMMARY_OUTPUT``
-     - [table]
+     - [vector: table]
      - Table with summary of the class field mapped to the
        corresponding unique value.  
 
@@ -337,7 +345,7 @@ Python code
   :end-before: **end_algorithm_code_section**
 
 
-.. _qgisaddxyfieldstolayer:
+.. _qgisaddxyfields:
 
 Add X/Y fields to layer
 ----------------------------
@@ -386,7 +394,7 @@ Parameters
 
        Default: ``[Create temporary layer]``
      - Specify the output layer.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types_append**
@@ -412,7 +420,7 @@ Outputs
 Python code
 ...........
 
-**Algorithm ID**: ``native:addxyfieldstolayer``
+**Algorithm ID**: ``native:addxyfields``
 
 .. include:: ../algs_include.rst
   :start-after: **algorithm_code_section**
@@ -427,6 +435,10 @@ Adds a new attribute to a vector layer, with values resulting from
 applying an expression to each feature.
 
 The expression is defined as a Python function.
+
+.. warning::
+ This algorithm is a potential security risk if executed with unchecked inputs,
+ and may result in system damage or data leaks.
 
 Parameters
 ..........
@@ -457,19 +469,27 @@ Parameters
        Default: 0
      - Type of the new field. One of:
        
-       * 0 --- Integer
-       * 1 --- Float
-       * 2 --- String
+       * 0 --- Integer (32 bit)
+       * 1 --- Decimal (double)
+       * 2 --- Text (string)
+       * 3 --- Boolean
+       * 4 --- Date
+       * 5 --- Time
+       * 6 --- Date & Time
+       * 7 --- Binary Object (BLOB)
+       * 8 --- String List
+       * 9 --- Integer List
+       * 10 --- Decimal (double) List
        
    * - **Field length**
      - ``FIELD_LENGTH``
-     - [number]
+     - [numeric: integer]
        
        Default: 10
      - Length of the field
    * - **Field precision**
      - ``FIELD_PRECISION``
-     - [number]
+     - [numeric: integer]
        
        Default: 3
      - Precision of the field. Useful with Float field type.
@@ -565,7 +585,7 @@ Parameters
 
        Default: ``[Create temporary layer]``
      - Specify the output vector layer with the remaining fields.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types_append**
@@ -612,7 +632,7 @@ By default, all unique keys are added.
 
 The PostgreSQL `HStore <https://www.postgresql.org/docs/10/hstore.html>`_
 is a simple key-value store used in PostgreSQL and GDAL (when reading
-an `OSM file <https://gdal.org/drivers/vector/osm.html#other-tags-field>`_
+an `OSM file <https://gdal.org/en/latest/drivers/vector/osm.html#other-tags-field>`_
 with the ``other_tags`` field.
 
 Parameters
@@ -629,7 +649,7 @@ Parameters
      - Description
    * - **Input layer**
      - ``INPUT``
-     - [vector: any]
+     - [vector: geometry]
      - Input vector layer
    * - **HStore field**
      - ``FIELD``
@@ -719,7 +739,7 @@ Parameters
      - [folder]
 
        Default: ``[Save to temporary folder]``
-     - Folder in which to store the output files. One of:
+     - Folder in which to store the output files. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **directory_output_types**
@@ -760,8 +780,7 @@ You can use all the supported expressions and functions.
 
 A new layer is created with the result of the expression.
 
-The field calculator is very useful when used in
-:ref:`processing.modeler`.
+The field calculator is very useful when used in :ref:`processing.modeler`.
 
 Parameters
 ..........
@@ -790,22 +809,29 @@ Parameters
        Default: 0
      - The type of the field.  One of:
        
-       * 0 --- Float
-       * 1 --- Integer
-       * 2 --- String
+       * 0 --- Decimal (double)
+       * 1 --- Integer (32 bit)
+       * 2 --- Text (string)
        * 3 --- Date
+       * 4 --- Time
+       * 5 --- Date & Time
+       * 6 --- Boolean
+       * 7 --- Binary Object (BLOB)
+       * 8 --- String List
+       * 9 --- Integer List
+       * 10 --- Decimal (double) List
        
    * - **Output field width**
      - ``FIELD_LENGTH``
-     - [number]
+     - [numeric: integer]
        
-       Default: 10
+       Default: 0
      - The length of the result field (minimum 0)
    * - **Field precision**
      - ``FIELD_PRECISION``
-     - [number]
+     - [numeric: integer]
        
-       Default: 3
+       Default: 0
      - The precision of the result field (minimum 0, maximum 15)
    * - **Create new field**
      - ``NEW_FIELD``
@@ -817,9 +843,9 @@ Parameters
      - ``FORMULA``
      - [expression]
      - The formula to use to calculate the result
-   * - **Output file**
+   * - **Calculated**
      - ``OUTPUT``
-     - [vector: any]
+     - [same as input]
        
        Default: ``[Create temporary layer]``
      - Specification of the output layer.
@@ -841,7 +867,7 @@ Outputs
      - Description
    * - **Calculated**
      - ``OUTPUT``
-     - [vector: any]
+     - [same as input]
      - Output layer with the calculated field values
 
 Python code
@@ -920,29 +946,49 @@ Parameters
        :guilabel:`Source expression` (``expression``) [expression]
          Field or expression from the input layer.
 
-       :guilabel:`Field name` (``name``) [string]
+       :guilabel:`Name` (``name``) [string]
          Name of the field in the output layer.
          By default input field name is kept.
 
        :guilabel:`Type` (``type``) [enumeration]
          Data type of the output field.
-         Available types depend on the output layer provider.
+         Available types may not be compatible with the output layer provider.
+         One of:
 
-       :guilabel:`Length` (``length``) [number]
+         .. attention:: For certain field types, e.g. lists,
+          an extra ``sub_type`` parameter helps refine the specific type of the data.
+          It is automatically set in the GUI but may be needed
+          if you're running the algorithm in Python or from the command line.
+
+         .. include:: ../algs_include.rst
+            :start-after: **vector_field_types**
+            :end-before: **end_vector_field_types**
+
+       :guilabel:`Sub-type` (``sub_type``) [enumeration]
+         For certain field types, e.g. lists, this parameter helps refine the specific ``type`` of the data.
+         It is automatically set in the GUI but may be needed
+         if you're running the algorithm in Python or from the command line.
+         :ref:`One of <output_parameter_widget>`:
+
+         .. include:: ../algs_include.rst
+            :start-after: **vector_field_subtypes**
+            :end-before: **end_vector_field_subtypes**
+
+       :guilabel:`Length` (``length``) [numeric: integer]
          Length of the output field.
 
-       :guilabel:`Precision` (``precision``) [number]
+       :guilabel:`Precision` (``precision``) [numeric: integer]
          Precision of the output field.
 
        :guilabel:`Constraints` (``constraints``) [string]
          When using a template layer, indicates whether there are constraints
          applied to the template field. Hover over the cell to display the constraints.
 
-       :guilabel:`Field alias` (``field_alias``) [string]
+       :guilabel:`Alias` (``field_alias``) [string]
          Set a name to use as alias for the field. Not supported by all format types.
          Existing aliases are displayed and will be copied to the destination layer if supported.
 
-       :guilabel:`Field comment` (``field_comment``) [string]
+       :guilabel:`Comment` (``field_comment``) [string]
          Store a comment describing the field. Not supported by all format types.
          Existing comments are displayed and will be copied to the destination layer if supported.
 
@@ -953,11 +999,11 @@ Parameters
 
    * - **Refactored**
      - ``OUTPUT``
-     - [vector: any]
+     - [same as input]
 
        Default: ``[Create temporary layer]``
      - Specification of the output layer.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types_append**
@@ -976,7 +1022,7 @@ Outputs
      - Description
    * - **Refactored**
      - ``OUTPUT``
-     - [vector: any]
+     - [same as input]
      - Output layer with refactored fields
 
 Python code
@@ -1026,11 +1072,11 @@ Parameters
      - The new field name
    * - **Renamed**
      - ``OUTPUT``
-     - [vector: same as input]
+     - [same as input]
 
        Default: ``[Create temporary layer]``
      - Specification of the output layer.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types_append**
@@ -1049,7 +1095,7 @@ Outputs
      - Description
    * - **Renamed**
      - ``OUTPUT``
-     - [vector: same as input]
+     - [same as input]
      - Output layer with the renamed field
 
 Python code
@@ -1094,11 +1140,11 @@ Parameters
      - List of fields to keep in the layer
    * - **Retained fields**
      - ``OUTPUT``
-     - [vector: same as input]
+     - [same as input]
 
        Default: ``[Create temporary layer]``
      - Specification of the output layer.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types_append**
@@ -1117,7 +1163,7 @@ Outputs
      - Description
    * - **Retained fields**
      - ``OUTPUT``
-     - [vector: same as input]
+     - [same as input]
      - Output layer with the retained fields
 
 Python code
@@ -1169,7 +1215,7 @@ Parameters
      - [same as input]
 
        Default: ``[Create Temporary Layer]``
-     - Specify the output layer. One of:
+     - Specify the output layer. :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **layer_output_types_append**

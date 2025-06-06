@@ -12,11 +12,10 @@ Vector conversion
 
 Convert format
 --------------
-Converts any OGR-supported vector layer into another OGR-supported
-format.
+Converts any OGR-supported vector layer into another OGR-supported format.
 
 This algorithm is derived from the
-`ogr2ogr utility <https://gdal.org/programs/ogr2ogr.html>`_.
+`ogr2ogr utility <https://gdal.org/en/latest/programs/ogr2ogr.html>`_.
 
 Parameters
 ..........
@@ -47,7 +46,7 @@ Basic parameters
      - ``OUTPUT``
      - [same as input]
      - Specification of the output vector layer.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types**
@@ -72,7 +71,7 @@ Advanced parameters
    * - **Additional creation options**
 
        Optional
-     - ``OPTIONS``
+     - ``CREATION_OPTIONS`` (for QGIS <= 3.42, this was ``OPTIONS``)
      - [string]
 
        Default: '' (no additional options)
@@ -113,7 +112,7 @@ New values are assigned based on the attribute value of
 the overlapping vector feature.
 
 This algorithm is derived from the
-`GDAL rasterize utility <https://gdal.org/programs/gdal_rasterize.html>`_.
+`GDAL rasterize utility <https://gdal.org/en/latest/programs/gdal_rasterize.html>`_.
 
 Parameters
 ..........
@@ -132,7 +131,7 @@ Basic parameters
       - Description
    *  - **Input layer**
       - ``INPUT``
-      - [vector: any]
+      - [vector: geometry]
       - Input vector layer
    *  - **Input raster layer**
       - ``INPUT_RASTER``
@@ -208,7 +207,7 @@ The pixels to overwrite are chosen based on the supplied (overlapping)
 vector layer.
 
 This algorithm is derived from the
-`GDAL rasterize utility <https://gdal.org/programs/gdal_rasterize.html>`_.
+`GDAL rasterize utility <https://gdal.org/en/latest/programs/gdal_rasterize.html>`_.
 
 Parameters
 ..........
@@ -227,7 +226,7 @@ Basic parameters
       - Description
    *  - **Input layer**
       - ``INPUT``
-      - [vector: any]
+      - [vector: geometry]
       - Input vector layer
    *  - **Input raster layer**
       - ``INPUT_RASTER``
@@ -235,7 +234,7 @@ Basic parameters
       - Input raster layer
    *  - **A fixed value to burn**
       - ``BURN``
-      - [number]
+      - [numeric: double]
 
         Default: 0.0
       - The value to burn
@@ -298,11 +297,10 @@ Python code
 
 Rasterize (vector to raster)
 ----------------------------
-Converts vector geometries (points, lines and polygons) into a raster
-image.
+Converts vector geometries (points, lines and polygons) into a raster image.
 
 This algorithm is derived from the
-`GDAL rasterize utility <https://gdal.org/programs/gdal_rasterize.html>`_.
+`GDAL rasterize utility <https://gdal.org/en/latest/programs/gdal_rasterize.html>`_.
 
 **Default menu**: :menuselection:`Raster --> Conversion`
 
@@ -323,7 +321,7 @@ Basic parameters
      - Description
    * - **Input layer**
      - ``INPUT``
-     - [vector: any]
+     - [vector: geometry]
      - Input vector layer
    * - **Field to use for a burn-in value**
 
@@ -336,13 +334,11 @@ Basic parameters
 
        Optional
      - ``BURN``
-     - [number]
+     - [numeric: double]
 
        Default: 0.0
      - A fixed value to burn into a band for all features.
    * - **Burn value extracted from the "Z" values of the feature**
-
-       Optional
      - ``USE_Z``
      - [boolean]
 
@@ -363,7 +359,7 @@ Basic parameters
 
    * - **Width/Horizontal resolution**
      - ``WIDTH``
-     - [number]
+     - [numeric: double]
 
        Default: 0.0
      - Sets the width (if size units is "Pixels") or horizontal
@@ -371,7 +367,7 @@ Basic parameters
        output raster. Minimum value: 0.0.
    * - **Height/Vertical resolution**
      - ``HEIGHT``
-     - [number]
+     - [numeric: double]
 
        Default: 0.0
      - Sets the height (if size units is "Pixels") or vertical
@@ -394,7 +390,7 @@ Basic parameters
 
        Optional
      - ``NODATA``
-     - [number]
+     - [numeric: double]
 
        Default: 0.0
      - Assigns a specified NoData value to output bands
@@ -404,7 +400,7 @@ Basic parameters
 
        Default: ``[Save to temporary file]``
      - Specification of the output raster layer.
-       One of:
+       :ref:`One of <output_parameter_widget>`:
 
        .. include:: ../algs_include.rst
           :start-after: **file_output_types**
@@ -429,7 +425,7 @@ Advanced parameters
    * - **Additional creation options**
 
        Optional
-     - ``OPTIONS``
+     - ``CREATION_OPTIONS`` (for QGIS <= 3.42, this was ``OPTIONS``)
      - [string]
 
        Default: ''
@@ -458,7 +454,7 @@ Advanced parameters
 
        Optional
      - ``INIT``
-     - [number]
+     - [numeric: double]
      - Pre-initializes the output image bands with this value.
        Not marked as the NoData value in the output file.
        The same value is used in all the bands.

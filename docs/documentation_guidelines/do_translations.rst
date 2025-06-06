@@ -38,7 +38,7 @@ efforts.
 Transifex
 ---------
 
-The web-based translating platform `Transifex <https://app.transifex.com>`_ is used for all QGIS
+The web-based translating platform `Transifex <https://www.transifex.com>`_ is used for all QGIS
 translations: the desktop application itself (or GUI) and the documentation.
 So the first thing you need is an account to login and get started.
 
@@ -59,7 +59,7 @@ Join a Project
    Verify your account by the link in the email you will receive.
 #. Login
 #. You then get a popup to select which language you want to help translate to.
-   Please, note that we try to make the process as simple as possible and only target languages,
+   Please, note that we try to make the process as simple as possible and only mention target languages,
    regardless of the country parameter (e.g. ``French (fr)`` and **NOT** ``French (France) (fr_FR)``).
    Only if there are notable differences in the languages (e.g. portuguese in Portugal vs Brazil)
    we may allow different versions.
@@ -184,8 +184,8 @@ Translation in Transifex
 
 In order to translate using Transifex, you need to:
 
-#. `create an account on Transifex and join the QGIS project
-   <https://qgis.org/en/site/getinvolved/translate.html#join-a-project>`_.
+#. :ref:`create an account on Transifex and join the QGIS project
+   <becoming-translator>`.
 #. Once you are part of a language team, click on the corresponding project
    (in this case ``QGIS Documentation``). A list of available languages with
    their ratio of translation is displayed.

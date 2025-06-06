@@ -45,6 +45,8 @@ To create a new GeoPackage layer, press the |newGeoPackageLayer|
 :menuselection:`New GeoPackage Layer...` button in the
 :menuselection:`Layer --> Create Layer -->` menu or from the
 :guilabel:`Data Source Manager` toolbar.
+You can also create a new GeoPackage layer through the :guilabel:`Browser Panel`
+by selecting the :guilabel:`Create Database and Layer...`. 
 The :guilabel:`New GeoPackage Layer` dialog will be displayed as shown in
 :numref:`figure_create_geopackage`.
 
@@ -335,12 +337,12 @@ algorithm <processing_algs>`.
 Creating new layers from an existing layer
 ==========================================
 
-Both raster and vector layers can be saved in a different format and/or
+Layers (raster, vector and point cloud) can be saved in a different format and/or
 reprojected to a different coordinate reference system (CRS) using the
 :menuselection:`Layer --> Save As...` menu or right-clicking on the
 layer in the :guilabel:`Layers panel` and selecting:
 
-* :menuselection:`Export --> Save As...` for raster layers
+* :menuselection:`Export --> Save As...` for raster and point cloud layers
 * :menuselection:`Export --> Save Features As...` or
   :menuselection:`Export --> Save Selected Features As...` for vector
   layers.
@@ -364,7 +366,7 @@ Among the common parameters for raster and vector are:
   using the :ref:`extent_selector <extent_selector>` widget
 * :guilabel:`Add saved file to map`: to add the new layer to the canvas
 
-However, some parameters are specific to raster and vector formats:
+However, some parameters are specific to certain formats:
 
 Raster specific parameters
 --------------------------
@@ -445,7 +447,7 @@ Depending on the format of export, some of these options may be available:
      the data as a hidden attribute. Only some formats can handle this kind of
      information. KML, DXF and TAB file formats are such formats. For advanced
      details, you can read the `OGR Feature Styles specification
-     <https://gdal.org/user/ogr_feature_style.html>`_ document.
+     <https://gdal.org/en/latest/user/ogr_feature_style.html>`_ document.
 
 * :guilabel:`Geometry`: you can configure the geometry capabilities of the
   output layer
@@ -468,10 +470,10 @@ Depending on the format of export, some of these options may be available:
 * :guilabel:`Datasource Options`, :guilabel:`Layer Options` or
   :guilabel:`Custom Options` which allow you to configure advanced parameters
   depending on the output format. Some are described in :ref:`supported_format`
-  but for full details, see the `GDAL <https://gdal.org>`_ driver documentation.
+  but for full details, see the `GDAL <https://gdal.org/en/latest>`_ driver documentation.
   Each file format has its own custom parameters, e.g. for the ``GeoJSON`` format
   have a look at the
-  `GDAL GeoJSON <https://gdal.org/drivers/vector/geojson.html#layer-creation-options>`_
+  `GDAL GeoJSON <https://gdal.org/en/latest/drivers/vector/geojson.html#layer-creation-options>`_
   documentation.
 
 .. _figure_save_vector:
@@ -494,6 +496,26 @@ decide whether to:
 
 For formats like ESRI Shapefile, MapInfo .tab, feature append is also available.
 
+Point Cloud specific parameters
+-------------------------------
+
+Similar to raster and vector layers, point cloud layers can be saved in a different
+format and/or reprojected to a different coordinate reference system (CRS).
+This allows you to export a point cloud layer to vector or point cloud formats.
+Current supported formats are: Temporary scratch (memory layer), GeoPackage, ESRI Shapefile,
+DXF and LAS/LAZ point cloud.
+In addition to the common parameters listed above, exporting point cloud layers includes the following options:
+
+* :guilabel:`Filter by Polygon Layer`: Allows you to filter the point cloud data based on a polygon layer.
+* :guilabel:`Elevation Range`: Enables filtering of the point cloud data based on a specified Z range.
+* :guilabel:`Limit number of points`: Provides an option to limit the number of points exported from the point cloud layer.
+
+.. _figure_saveas_pointcloud:
+
+.. figure:: img/saveas_pointcloud.png
+   :align: center
+
+   Saving a point cloud layer as a new layer
 
 .. index:: DXF Export
 .. _create_dxf_files:

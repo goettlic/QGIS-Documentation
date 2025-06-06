@@ -18,8 +18,7 @@ geospatial datasets. They use a hierarchical structure to efficiently manage
 and display 3D content, optimising performance by dynamically loading
 appropriate levels of detail. This technology is widely used in urban 
 planning, architecture, simulation, gaming, and virtual reality, providing
-a standardised and interoperable solution for visualising complex geographical
-data. Read :ref:`3d_tiles` for more details.
+a standardised and interoperable solution for visualising complex geographical data.
 
 
 .. _figure_3d_tiles_example:
@@ -30,39 +29,16 @@ data. Read :ref:`3d_tiles` for more details.
    Example of 3D tiles
 
 
-Data Sources
-============
+Currently, QGIS supports two formats of 3D tiles:
 
-Support for 3D tiles:
+* `Cesium 3D tiles <https://cesium.com/why-cesium/3d-tiles/>`_,
+  used primarily for complex 3D models of buildings or whole cities.
+  Such datasets can be provided by cloud-based platforms such as Cesium Ion
+  or Google (*Photorealistic 3D Tiles*).
+* `Quantized Mesh tiles <https://github.com/CesiumGS/quantized-mesh>`_,
+  used for terrain elevation data.
 
-* Remote source - ``http://example.com/tileset.json``
-* Local files - ``file:///path/to/tiles/tileset.json``
-
-
-Using data from Cesium ion 
---------------------------
-
-*Cesium ion* is a cloud-based platform for managing and streaming 3D geospatial
-data. It simplifies data management, visualisation and sharing. To add 3D tiles
-from Cesium ion, you need to first sign up to their service 
-here: https://ion.cesium.com.
-
-You can also use Cesium ion plugin from the QGIS repository 
-to add the data to QGIS.
-
-Using Google 3D data
---------------------
-
-To use Google Photorealistic 3D tiles in QGIS, get an API key for 3D tiles. 
-Once you have the key, simply add Google tiles using the same 
-connection process.
-
-.. _figure_google_3d_tiles:
-
-.. figure:: img/google_3d_tiles.png
-   :align: center
-
-   Google 3D Tiles connection 
+See :ref:`3d_tiles` for instructions on how to add these data sources to QGIS.
 
 .. _3dtiles_properties:
 
